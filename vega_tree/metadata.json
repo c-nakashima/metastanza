@@ -1,0 +1,87 @@
+{
+  "@context": {
+    "stanza": "http://togostanza.org/resource/stanza#"
+  },
+  "@id": "vega_tree",
+  "stanza:label": "Vega Tree",
+  "stanza:definition": "vega_wrapping_tree",
+  "stanza:type": "Stanza",
+  "stanza:display": "Tree",
+  "stanza:provider": "Togostanza",
+  "stanza:license": "MIT",
+  "stanza:author": "c-nakashima",
+  "stanza:address": "nakashima@penqe.com",
+  "stanza:contributor": [],
+  "stanza:created": "2020-11-26",
+  "stanza:updated": "2020-11-26",
+  "stanza:parameter": [
+    {
+      "stanza:key": "src-url",
+      "stanza:example": "https://vega.github.io/vega/examples/tree-layout.vg.json",
+      "stanza:description": "source url which returns Vega specification compliant JSON",
+      "stanza:required": true
+    },
+    {
+      "stanza:key": "width",
+      "stanza:type": "number",
+      "stanza:example": "600",
+      "stanza:description": "width of your stanza"
+    },
+    {
+      "stanza:key": "height",
+      "stanza:type": "number",
+      "stanza:example": "1600",
+      "stanza:description": "height of your stanza"
+    },
+    {
+      "stanza:key": "padding",
+      "stanza:type": "number",
+      "stanza:example": "5",
+      "stanza:description": "padding around your stanza"
+    },
+    {
+      "stanza:key": "branch-color",
+      "stanza:type": "color",
+      "stanza:example": "#ccc",
+      "stanza:description": "color of branches"
+    },
+    {
+      "stanza:key": "color-scheme",
+      "stanza:type": "color",
+      "stanza:example": "pastel1",
+      "stanza:description": "input name of color scheme from https://vega.github.io/vega/docs/schemes/"
+    },
+    {
+      "stanza:key": "node-size",
+      "stanza:type": "number",
+      "stanza:example": "100",
+      "stanza:description": "size of each node"
+    },
+    {
+      "stanza:key": "stroke-color",
+      "stanza:type": "color",
+      "stanza:example": "#fff",
+      "stanza:description": "the color of stroke"
+    }
+  ],
+  "stanza:about-link-placement": "bottom-right",
+  "stanza:style": [
+    {
+      "stanza:key": "--greeting-color",
+      "stanza:type": "color",
+      "stanza:default": "#eb7900",
+      "stanza:description": "text color of greeting"
+    },
+    {
+      "stanza:key": "--greeting-align",
+      "stanza:type": "single-choice",
+      "stanza:choice": [
+        "left",
+        "center",
+        "right"
+      ],
+      "stanza:default": "center",
+      "stanza:description": "text align of greeting"
+    }
+  ]
+}
