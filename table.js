@@ -46,6 +46,24 @@ var metadata = {
 		"stanza:description": "basic fill color"
 	},
 	{
+		"stanza:key": "--stroke-color",
+		"stanza:type": "color",
+		"stanza:default": "#999",
+		"stanza:description": "border color"
+	},
+	{
+		"stanza:key": "--stroke-width",
+		"stanza:type": "text",
+		"stanza:default": "0.5px",
+		"stanza:description": "stroke wodth"
+	},
+	{
+		"stanza:key": "--label-font",
+		"stanza:type": "text",
+		"stanza:default": "serif",
+		"stanza:description": "font(e.g: serif,san serif,fantasy)"
+	},
+	{
 		"stanza:key": "--greeting-align",
 		"stanza:type": "single-choice",
 		"stanza:choice": [
@@ -61,7 +79,7 @@ var metadata = {
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<style>\n  *{\n    font-family: \"Helvetica Nune\";\n    box-sizing: border-box;\n  }\n  table{\n    width: 800px;\n    align: left;\n    border-collapse: collapse;\n  }\n  thead{\n    background-color :var(--basic-fill-color);\n    font-weight: bold;\n    font-size: 12px;\n    border:1px solid #999;\n  }\n  tbody,td,tr{\n    font-size: 10px;\n    padding:8px 5px;\n  }\n  td{\n    border:1px solid #999;\n    border-collapse: collapse;\n  }\n\n</style>\n\n<table>\n  <thead>\n    <tr>\n      <td>Original source</td>\n      <td>Organism name</td>\n      <td>Taxonomy ID</td>\n      <td>Isolation</td>\n      <td>Environments</td>\n    </tr>    \n  </thead>\n  <tbody>\n    <tr>\n      <td>NBRC 14436</td>\n      <td>\"Thermoanaerobacter cellulolyticus\" Taya et al.</td>\n      <td>NBRC 14436</td>\n      <td>Hot spring sediments in Nozawa, Japan</td>\n      <td>hot spring,  spring sediment</td>\n    </tr>\n    <tr>\n      <td>NBRC 14436</td>\n      <td>\"Thermoanaerobacter cellulolyticus\" Taya et al.</td>\n      <td>NBRC 14436</td>\n      <td>Hot spring sediments in Nozawa, Japan</td>\n      <td>hot spring,  spring sediment</td>\n    </tr>\n    <tr>\n      <td>NBRC 14436</td>\n      <td>\"Thermoanaerobacter cellulolyticus\" Taya et al.</td>\n      <td>NBRC 14436</td>\n      <td>Hot spring sediments in Nozawa, Japan</td>\n      <td>hot spring,  spring sediment</td>\n    </tr>\n    <tr>\n      <td>NBRC 14436</td>\n      <td>\"Thermoanaerobacter cellulolyticus\" Taya et al.</td>\n      <td>NBRC 14436</td>\n      <td>Hot spring sediments in Nozawa, Japan</td>\n      <td>hot spring,  spring sediment</td>\n    </tr>\n  </tbody>\n</table>\n\n";
+    return "<style>\n  *{\n    font-family: var(--label-font);\n    box-sizing: border-box;\n  }\n  table{\n    width: 800px;\n    align: left;\n    border-collapse: collapse;\n  }\n  thead{\n    background-color :var(--basic-fill-color);\n    font-weight: bold;\n    font-size: 12px;\n    border-width: var(--stroke-width);\n    border-style: solid; \n    border-color: var(--stroke-color);\n  }\n  tbody,td,tr{\n    font-size: 10px;\n    padding:8px 5px;\n  }\n  td{\n    border-width: var(--stroke-width);\n    border-style: solid; \n    border-color: var(--stroke-color);\n    border-collapse: collapse;\n  }\n\n</style>\n\n<table>\n  <thead>\n    <tr>\n      <td>Original source</td>\n      <td>Organism name</td>\n      <td>Taxonomy ID</td>\n      <td>Isolation</td>\n      <td>Environments</td>\n    </tr>    \n  </thead>\n  <tbody>\n    <tr>\n      <td>NBRC 14436</td>\n      <td>\"Thermoanaerobacter cellulolyticus\" Taya et al.</td>\n      <td>NBRC 14436</td>\n      <td>Hot spring sediments in Nozawa, Japan</td>\n      <td>hot spring,  spring sediment</td>\n    </tr>\n    <tr>\n      <td>NBRC 14436</td>\n      <td>\"Thermoanaerobacter cellulolyticus\" Taya et al.</td>\n      <td>NBRC 14436</td>\n      <td>Hot spring sediments in Nozawa, Japan</td>\n      <td>hot spring,  spring sediment</td>\n    </tr>\n    <tr>\n      <td>NBRC 14436</td>\n      <td>\"Thermoanaerobacter cellulolyticus\" Taya et al.</td>\n      <td>NBRC 14436</td>\n      <td>Hot spring sediments in Nozawa, Japan</td>\n      <td>hot spring,  spring sediment</td>\n    </tr>\n    <tr>\n      <td>NBRC 14436</td>\n      <td>\"Thermoanaerobacter cellulolyticus\" Taya et al.</td>\n      <td>NBRC 14436</td>\n      <td>Hot spring sediments in Nozawa, Japan</td>\n      <td>hot spring,  spring sediment</td>\n    </tr>\n  </tbody>\n</table>\n\n";
 },"useData":true}]
 ];
 

@@ -17,13 +17,20 @@ async function vegaTree(stanza, params) {
 
   //scales
   spec.scales[0].range = {"scheme": params["color-scheme"]};
-
+  // spec.scales[0].range = [
+  //   'var(--series-0-color)',
+  //   'var(--series-1-color)',
+  //   'var(--series-2-color)',
+  //   'var(--series-3-color)',
+  //   'var(--series-4-color)',
+  //   'var(--series-5-color)'
+  // ]
 
   //Marks:描画について
   spec.marks[0].encode ={
     "update": {
       "path": {"field": "path"},
-      "stroke": {"value": params["branch-color"]}
+      "stroke": {"value": "var(--branch-color)"}
     },
     "hover": {
       "stroke": {"value": "var(--emphasized-color)"}
@@ -32,8 +39,8 @@ async function vegaTree(stanza, params) {
 
   spec.marks[1].encode ={
     "enter": {
-      "size": {"value": params["node-size"]},
-      "stroke": {"value": params["stroke-color"]}
+      "size": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--node-size")},
+      "stroke": {"value": "var(--stroke-color)"}
     },
     "update": {
       "x": {"field": "x"},
@@ -48,7 +55,7 @@ async function vegaTree(stanza, params) {
   spec.marks[2].encode ={
     "enter": {
       "text": {"field": "name"},
-      "font":{"value": params["label-font"]},
+      "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
       "fontSize": {"value": params["label-size"]},
       "baseline": {"value": "middle"},
     },
@@ -115,34 +122,10 @@ var metadata = {
 		"stanza:description": "padding around your stanza"
 	},
 	{
-		"stanza:key": "branch-color",
-		"stanza:type": "color",
-		"stanza:example": "#ccc",
-		"stanza:description": "color of branches"
-	},
-	{
 		"stanza:key": "color-scheme",
 		"stanza:type": "color",
 		"stanza:example": "pastel1",
 		"stanza:description": "input name of color scheme from https://vega.github.io/vega/docs/schemes/"
-	},
-	{
-		"stanza:key": "node-size",
-		"stanza:type": "number",
-		"stanza:example": "100",
-		"stanza:description": "size of each node"
-	},
-	{
-		"stanza:key": "stroke-color",
-		"stanza:type": "color",
-		"stanza:example": "#fff",
-		"stanza:description": "the color of stroke"
-	},
-	{
-		"stanza:key": "label-font",
-		"stanza:type": "string",
-		"stanza:example": "san serif",
-		"stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -158,6 +141,66 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#333",
 		"stanza:description": "text color of each nodes"
+	},
+	{
+		"stanza:key": "--branch-color",
+		"stanza:type": "color",
+		"stanza:default": "#eee",
+		"stanza:description": "color of branches"
+	},
+	{
+		"stanza:key": "--node-size",
+		"stanza:type": "number",
+		"stanza:default": "100",
+		"stanza:description": "size of each node"
+	},
+	{
+		"stanza:key": "--stroke-color",
+		"stanza:type": "color",
+		"stanza:default": "#fff",
+		"stanza:description": "color of stroke"
+	},
+	{
+		"stanza:key": "--label-font",
+		"stanza:type": "string",
+		"stanza:default": "san serif",
+		"stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"
+	},
+	{
+		"stanza:key": "--series-0-color",
+		"stanza:type": "color",
+		"stanza:default": "#FFC39E",
+		"stanza:description": "first color"
+	},
+	{
+		"stanza:key": "--series-1-color",
+		"stanza:type": "color",
+		"stanza:default": "#FF8DB8",
+		"stanza:description": "second color"
+	},
+	{
+		"stanza:key": "--series-2-color",
+		"stanza:type": "color",
+		"stanza:default": "#C690C6",
+		"stanza:description": "third color"
+	},
+	{
+		"stanza:key": "--series-3-color",
+		"stanza:type": "color",
+		"stanza:default": "#6992D1",
+		"stanza:description": "forth color"
+	},
+	{
+		"stanza:key": "--series-4-color",
+		"stanza:type": "color",
+		"stanza:default": "#71B093",
+		"stanza:description": "fifth color"
+	},
+	{
+		"stanza:key": "--series-5-color",
+		"stanza:type": "color",
+		"stanza:default": "#94BC8A",
+		"stanza:description": "sixth color"
 	}
 ]
 };

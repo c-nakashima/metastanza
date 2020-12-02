@@ -49,6 +49,7 @@ async function vegaBarchart(stanza, params) {
       "interactive": true,
       "update": {
         "fill": {"value": "var(--label-color)"},
+        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
       },
       "hover": {
@@ -57,6 +58,7 @@ async function vegaBarchart(stanza, params) {
     },
     "title": {
       "update": {
+        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
       }
     },
@@ -78,6 +80,7 @@ async function vegaBarchart(stanza, params) {
       "interactive": true,
       "update": {
         "fill": {"value": "var(--label-color)"},
+        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
       },
       "hover": {
@@ -86,6 +89,7 @@ async function vegaBarchart(stanza, params) {
     },
     "title": {
       "update": {
+        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
       }
     },
@@ -118,6 +122,7 @@ async function vegaBarchart(stanza, params) {
       "align": {"value": "center"},
       "baseline": {"value": "bottom"},
       "fill": {"value": "var(--emphasized-color)"},
+      "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
       "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontsize-of-value")},
       "fontWeight": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--fontweight-of-value")}
     },
@@ -272,6 +277,12 @@ var metadata = {
 		"stanza:type": "number",
 		"stanza:default": "12",
 		"stanza:description": "emphasized color when you hover on labels and rects"
+	},
+	{
+		"stanza:key": "--label-font",
+		"stanza:type": "string",
+		"stanza:default": "san serif",
+		"stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"
 	},
 	{
 		"stanza:key": "--axis-width",

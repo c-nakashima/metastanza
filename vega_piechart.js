@@ -15,7 +15,15 @@ async function vegaPiechart(stanza, params) {
 // カラースキームを独自で作成したい
   // vega.scheme('metastabasic', ['#AB3F61', '#F7EF8D', '#F7749E', '#5CD5F7', '#4895AB', '#4895AB']);
   // spec.scales[0].range.scheme = 'pastel1';
-  spec.scales[0].range.scheme = params["color-scheme"];
+  // spec.scales[0].range.scheme = params["color-scheme"];
+  spec.scales[0].range = [
+    'var(--series-0-color)',
+    'var(--series-1-color)',
+    'var(--series-2-color)',
+    'var(--series-3-color)',
+    'var(--series-4-color)',
+    'var(--series-5-color)'
+  ];
 
 //legendを出す
   spec.legend =[
@@ -159,6 +167,42 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#ec7d8d",
 		"stanza:description": "emphasized color when you hover on labels and rects"
+	},
+	{
+		"stanza:key": "--series-0-color",
+		"stanza:type": "color",
+		"stanza:default": "#FFC39E",
+		"stanza:description": "second color"
+	},
+	{
+		"stanza:key": "--series-1-color",
+		"stanza:type": "color",
+		"stanza:default": "#FF8DB8",
+		"stanza:description": "third color"
+	},
+	{
+		"stanza:key": "--series-2-color",
+		"stanza:type": "color",
+		"stanza:default": "#C690C6",
+		"stanza:description": "forth color"
+	},
+	{
+		"stanza:key": "--series-3-color",
+		"stanza:type": "color",
+		"stanza:default": "#6992D1",
+		"stanza:description": "fifth color"
+	},
+	{
+		"stanza:key": "--series-4-color",
+		"stanza:type": "color",
+		"stanza:default": "#71B093",
+		"stanza:description": "fifth color"
+	},
+	{
+		"stanza:key": "--series-5-color",
+		"stanza:type": "color",
+		"stanza:default": "#94BC8A",
+		"stanza:description": "first color"
 	}
 ]
 };
