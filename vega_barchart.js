@@ -16,6 +16,8 @@ async function vegaBarchart(stanza, params) {
   //stanza（描画範囲）のwidth・height
   spec.width = params["width"]; 
   spec.height = params["height"];
+  // spec.width = "var(--width)"
+  // spec.height = "var(--height)"
   
   //stanzaのpadding
   spec.padding = params["padding"];
@@ -286,7 +288,7 @@ var metadata = {
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "basic-fill-color",
+		"stanza:key": "--basic-fill-color",
 		"stanza:type": "color",
 		"stanza:default": "#94d0da",
 		"stanza:description": "bar color"
@@ -295,6 +297,12 @@ var metadata = {
 		"stanza:key": "--emphasized-color",
 		"stanza:type": "color",
 		"stanza:default": "#ec7d8d",
+		"stanza:description": "emphasized color when you hover on labels and rects"
+	},
+	{
+		"stanza:key": "--label-size",
+		"stanza:type": "number",
+		"stanza:default": "12",
 		"stanza:description": "emphasized color when you hover on labels and rects"
 	}
 ]
@@ -309,13 +317,16 @@ var templates = [
         return undefined
     };
 
-  return "<p class=\"greeting\">"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":1,"column":20},"end":{"line":1,"column":32}}}) : helper)))
+  return "<head>\n</head>\n\n<p class=\"greeting\">"
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"greeting") || (depth0 != null ? lookupProperty(depth0,"greeting") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"greeting","hash":{},"data":data,"loc":{"start":{"line":4,"column":20},"end":{"line":4,"column":32}}}) : helper)))
     + "</p>\n";
+},"useData":true}],
+["style-like-togovar.css", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
+    return ":root{\n  --basic-fill-color : #ff00ff;\n  --emphasized-color : #00ff00;\n}";
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n:root {\n  --basic-fill-color: #ff00ff;\n  --emphasized-color: #00ff00;\n}\n\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}";
 
 defineStanzaElement(vegaBarchart, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=vega_barchart.js.map
