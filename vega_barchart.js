@@ -45,7 +45,8 @@ async function vegaBarchart(stanza, params) {
       "interactive": true,
       "update": {
         "fill": {"value": params["label-color"]},
-        "fontSize": {"value": params["label-size"]},
+        // "fontSize": {"value": params["label-size"]},
+        "fontSize": {"value": "var(--label-size)"}
       },
       "hover": {
         "fill": {"value": "var(--emphasized-color)"}
@@ -326,7 +327,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\n:root {\n  --basic-fill-color: #ff00ff;\n  --emphasized-color: #00ff00;\n}\n\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}";
 
 defineStanzaElement(vegaBarchart, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=vega_barchart.js.map
