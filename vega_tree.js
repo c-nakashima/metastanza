@@ -24,6 +24,9 @@ async function vegaTree(stanza, params) {
     "update": {
       "path": {"field": "path"},
       "stroke": {"value": params["branch-color"]}
+    },
+    "hover": {
+      "stroke": {"value": "var(--emphasized-color)"}
     }
   };
 
@@ -36,9 +39,31 @@ async function vegaTree(stanza, params) {
       "x": {"field": "x"},
       "y": {"field": "y"},
       "fill": {"scale": "color", "field": "depth"}
+    },
+    "hover": {
+      "fill": {"value": "var(--emphasized-color)"}
     }
   };
 
+  spec.marks[2].encode ={
+    "enter": {
+      "text": {"field": "name"},
+      "font":{"value": params["label-font"]},
+      "fontSize": {"value": params["label-size"]},
+      "baseline": {"value": "middle"},
+    },
+    "update": {
+      "x": {"field": "x"},
+      "y": {"field": "y"},
+      "dx": {"signal": "datum.children ? -7 : 7"},
+      "align": {"signal": "datum.children ? 'right' : 'left'"},
+      "opacity": {"signal": "labels ? 1 : 0"},
+      "fill": {"value": "var(--label-color)"}
+    },
+    "hover": {
+      "fill": {"value": "var(--emphasized-color)"}
+    }
+  };
 
   const el = stanza.root.querySelector("main");
   const opts = {
@@ -112,26 +137,27 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:example": "#fff",
 		"stanza:description": "the color of stroke"
+	},
+	{
+		"stanza:key": "label-font",
+		"stanza:type": "string",
+		"stanza:example": "san serif",
+		"stanza:description": "font style of labels.(e.g serif, san serif, fantasy)"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--greeting-color",
+		"stanza:key": "--emphasized-color",
 		"stanza:type": "color",
-		"stanza:default": "#eb7900",
-		"stanza:description": "text color of greeting"
+		"stanza:default": "#ec7d8d",
+		"stanza:description": "emphasized color when you hover on text of each nodes"
 	},
 	{
-		"stanza:key": "--greeting-align",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"left",
-			"center",
-			"right"
-		],
-		"stanza:default": "center",
-		"stanza:description": "text align of greeting"
+		"stanza:key": "--label-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "text color of each nodes"
 	}
 ]
 };

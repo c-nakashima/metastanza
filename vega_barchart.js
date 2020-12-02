@@ -15,7 +15,7 @@ async function vegaBarchart(stanza, params) {
 
   //stanza（描画範囲）のwidth・height
   spec.width = params["width"]; 
-  spec.height = params["width"];
+  spec.height = params["height"];
   
   //stanzaのpadding
   spec.padding = params["padding"];
@@ -100,7 +100,7 @@ async function vegaBarchart(stanza, params) {
       "y2": {"scale": "yscale", "value": 0},
     },
     "update": {
-      "fill": {"value": "var(--bar-color)"}
+      "fill": {"value": "var(--basic-fill-color)"}
     },
     "hover": {
       "fill": {"value": "var(--emphasized-color)"}
@@ -286,7 +286,7 @@ var metadata = {
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--bar-color",
+		"stanza:key": "basic-fill-color",
 		"stanza:type": "color",
 		"stanza:default": "#94d0da",
 		"stanza:description": "bar color"
