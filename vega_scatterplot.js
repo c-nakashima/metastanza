@@ -31,14 +31,14 @@ async function vegaScatterplot(stanza, params) {
       "encode": {
           "ticks": {
             "update": {
-            "stroke": {"value": params["tick-color"]}
+            "stroke": {"value": "var(--tick-color)"}
             }
           },
           "labels": {
             "interactive": true,
             "update": {
-              "fill": {"value": params["label-color"]},
-              "fontSize": {"value": params["label-size"]},
+              "fill": {"value": "var(--label-color)"},
+              "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
             },
             "hover": {
               "fill": {"value": "var(--emphasized-color)"}
@@ -46,13 +46,13 @@ async function vegaScatterplot(stanza, params) {
           },
           "title": {
             "update": {
-              "fontSize": {"value": params["title-size"]}
+              "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
             }
           },
           "domain": {
             "update": {
-              "stroke": {"value": params["axis-color"]},
-              "strokeWidth": {"value": params["axis-width"]}
+              "stroke": {"value": "var(--axis-color)"},
+              "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
             }
           }
         }
@@ -67,14 +67,14 @@ async function vegaScatterplot(stanza, params) {
       "encode": {
         "ticks": {
           "update": {
-          "stroke": {"value": params["tick-color"]}
+          "stroke": {"value": "var(--tick-color)"}
           }
         },
         "labels": {
           "interactive": true,
           "update": {
-            "fill": {"value": params["label-color"]},
-            "fontSize": {"value": params["label-size"]},
+            "fill": {"value": "var(--label-color)"},
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")}
           },
           "hover": {
             "fill": {"value": "var(--emphasized-color)"}
@@ -82,13 +82,13 @@ async function vegaScatterplot(stanza, params) {
         },
         "title": {
           "update": {
-            "fontSize": {"value": params["title-size"]}
+            "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")}
           }
         },
         "domain": {
           "update": {
-            "stroke": {"value": params["axis-color"]},
-            "strokeWidth": {"value": params["axis-width"]}
+            "stroke": {"value": "var(--axis-color)"},
+            "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--axis-width")}
           }
         }
       }
@@ -100,9 +100,9 @@ async function vegaScatterplot(stanza, params) {
       "size": "size",
       "title": params["title-of-legend"],
       "format": "s",
-      "symbolStrokeColor": params["stroke-color"],
-      "symbolStrokeWidth": params["stroke-width"],
-      "symbolOpacity": params["opacity"],
+      "symbolStrokeColor": "var(--stroke-color)",
+      "symbolStrokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
+      "symbolOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--opacity"),
       "symbolType": params["symbol-type"],
       "symbolFillColor": {"value": "var(--basic-fill-color)"}
     }
@@ -119,9 +119,9 @@ async function vegaScatterplot(stanza, params) {
         "y": {"scale": "y", "field": "Miles_per_Gallon"},
         "size": {"scale": "size", "field": "Acceleration"},
         "shape": {"value": params["symbol-type"]},
-        "strokeWidth": {"value": params["stroke-width"]},
-        "opacity": {"value": params["opacity"]},
-        "stroke": {"value": params["stroke-color"]},
+        "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
+        "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
+        "stroke": {"value": "var(--stroke-color)"},
         "fill": {"value": "var(--basic-fill-color)"}
       },
       "hover": {
@@ -131,223 +131,12 @@ async function vegaScatterplot(stanza, params) {
     }
   ];
 
-  // spec.axes[0].encode = {
-  //   "ticks": {
-  //     "update": {
-  //     "stroke": {"value": params["tick-color"]}
-  //     }
-  //   },
-  //   "labels": {
-  //     "interactive": true,
-  //     "update": {
-  //       "fill": {"value": params["label-color"]},
-  //       "fontSize": {"value": params["label-size"]},
-  //     },
-  //     "hover": {
-  //       "fill": {"value": "var(--emphasized-color)"}
-  //     }
-  //   },
-  //   "title": {
-  //     "update": {
-  //       "fontSize": {"value": params["title-size"]}
-  //     }
-  //   },
-  //   "domain": {
-  //     "update": {
-  //       "stroke": {"value": params["axis-color"]},
-  //       "strokeWidth": {"value": params["axis-width"]}
-  //     }
-  //   }
-  // }
-
-  // spec.axes[1].encode = {
-  //   "ticks": {
-  //     "update": {
-  //     "stroke": {"value": params["tick-color"]}
-  //     }
-  //   },
-  //   "labels": {
-  //     "interactive": true,
-  //     "update": {
-  //       "fill": {"value": params["label-color"]},
-  //       "fontSize": {"value": params["label-size"]},
-  //     },
-  //     "hover": {
-  //       "fill": {"value": "var(--emphasized-color)"}
-  //     }
-  //   },
-  //   "title": {
-  //     "update": {
-  //       "fontSize": {"value": params["title-size"]}
-  //     }
-  //   },
-  //   "domain": {
-  //     "update": {
-  //       "stroke": {"value": params["axis-color"]},
-  //       "strokeWidth": {"value": params["axis-width"]}
-  //     }
-  //   }
-  // }
-
-//   spec.axes[0].title = params["xaxes-title"]
-//   spec.axes[1].title = params["yaxes-title"]
-  
-//   spec.legends[0].title = params["legends-title"]
-//   spec.legends[0].symbolOpacity = "var(--opacity)"
-//   spec.legends[0].symbolStrokeColor = "var(--plot-frame-color)"
-//   // spec.legends[0].symbolStrokeWidth = "var(--stroke-width)"
-//   // spec.legends[0].symbolType = ["symbol-type"]
-
-//   spec.marks[0].encode.update.fill.value = "var(--plot-color)"
-//   spec.marks[0].encode.update.stroke.value = "var(--plot-frame-color)"
-//   spec.marks[0].encode.update.opacity.value = "var(--opacity)"
-//   spec.marks[0].encode.update.strokeWidth.value = "var(--stroke-width)"
-//   // spec.marks[0].encode.update.shape.value = ["symbol-type"]
-//   spec.marks[0].encode.update.shape.value = params["--symbol-type"]
-
   const el = stanza.root.querySelector("main");
   const opts = {
     renderer: "svg"
   };
   await embed(el, spec, opts);
 }
-
-
-// import vegaEmbed from "vega-embed";
-
-// export default function vegaScatterplot(stanza, params) {
-//   // let spec = await fetch(params["src-url"]).then((res) => res.json());
-//   let spec = {
-//     "$schema": "https://vega.github.io/schema/vega/v5.json",
-//     "description": "A basic scatter plot example depicting automobile statistics.",
-//     "width": 200,
-//     "height": 200,
-//     "padding": 5,
-  
-//     "data": [
-//       {
-//         "name": "source",
-//         "url": "data/cars.json",
-//         "transform": [
-//           {
-//             "type": "filter",
-//             "expr": "datum['Horsepower'] != null && datum['Miles_per_Gallon'] != null && datum['Acceleration'] != null"
-//           }
-//         ]
-//       }
-//     ],
-  
-//     "scales": [
-//       {
-//         "name": "x",
-//         "type": "linear",
-//         "round": true,
-//         "nice": true,
-//         "zero": true,
-//         "domain": {"data": "source", "field": "Horsepower"},
-//         "range": "width"
-//       },
-//       {
-//         "name": "y",
-//         "type": "linear",
-//         "round": true,
-//         "nice": true,
-//         "zero": true,
-//         "domain": {"data": "source", "field": "Miles_per_Gallon"},
-//         "range": "height"
-//       },
-//       {
-//         "name": "size",
-//         "type": "linear",
-//         "round": true,
-//         "nice": false,
-//         "zero": true,
-//         "domain": {"data": "source", "field": "Acceleration"},
-//         "range": [4,361]
-//       }
-//     ],
-  
-//     "axes": [
-//       {
-//         "scale": "x",
-//         "grid": true,
-//         "domain": false,
-//         "orient": "bottom",
-//         "tickCount": 5,
-//         "title": "Horsepower"
-//       },
-//       {
-//         "scale": "y",
-//         "grid": true,
-//         "domain": false,
-//         "orient": "left",
-//         "titlePadding": 5,
-//         "title": "Miles_per_Gallon"
-//       }
-//     ],
-  
-//     "legends": [
-//       {
-//         "size": "size",
-//         "title": "Acceleration",
-//         "format": "s",
-//         "symbolStrokeColor": "#4682b4",
-//         "symbolStrokeWidth": 2,
-//         "symbolOpacity": 0.5,
-//         "symbolType": "circle"
-//       }
-//     ],
-  
-//     "marks": [
-//       {
-//         "name": "marks",
-//         "type": "symbol",
-//         "from": {"data": "source"},
-//         "encode": {
-//           "update": {
-//             "x": {"scale": "x", "field": "Horsepower"},
-//             "y": {"scale": "y", "field": "Miles_per_Gallon"},
-//             "size": {"scale": "size", "field": "Acceleration"},
-//             "shape": {"value": "circle"},
-//             "strokeWidth": {"value": 2},
-//             "opacity": {"value": 0.5},
-//             "stroke": {"value": "#4682b4"},
-//             "fill": {"value": "transparent"}
-//           }
-//         }
-//       }
-//     ]
-//   };
-
-//   console.log(spec)
-
-//   // spec.data[0].values = fetch('https://vega.github.io/vega-lite/data/cars.json').then((res) => res.json());
-//   // spec.data[0].url = 'https://vega.github.io/vega-lite/data/cars.json'
-//   spec.data[0].url = params["your-data"]
-
-//   spec.axes[0].title = params["xaxes-title"]
-//   spec.axes[1].title = params["yaxes-title"]
-  
-//   spec.legends[0].title = params["legends-title"]
-//   spec.legends[0].symbolOpacity = "var(--opacity)"
-//   spec.legends[0].symbolStrokeColor = "var(--plot-frame-color)"
-//   // spec.legends[0].symbolStrokeWidth = "var(--stroke-width)"
-//   // spec.legends[0].symbolType = ["symbol-type"]
-
-//   spec.marks[0].encode.update.fill.value = "var(--plot-color)"
-//   spec.marks[0].encode.update.stroke.value = "var(--plot-frame-color)"
-//   spec.marks[0].encode.update.opacity.value = "var(--opacity)"
-//   spec.marks[0].encode.update.strokeWidth.value = "var(--stroke-width)"
-//   // spec.marks[0].encode.update.shape.value = ["symbol-type"]
-//   spec.marks[0].encode.update.shape.value = params["--symbol-type"]
-
-
-//   const el = stanza.root.querySelector("main");
-//   const opts = {
-//     renderer: "svg"
-//   };
-//   vegaEmbed(el, spec, opts);
-// }
 
 var metadata = {
 	"@context": {
@@ -410,24 +199,6 @@ var metadata = {
 		"stanza:description": "orient of yscale.(please select left or right)"
 	},
 	{
-		"stanza:key": "tick-color",
-		"stanza:type": "color",
-		"stanza:example": "#333",
-		"stanza:description": "tick color"
-	},
-	{
-		"stanza:key": "label-color",
-		"stanza:type": "color",
-		"stanza:example": "#333",
-		"stanza:description": "label color"
-	},
-	{
-		"stanza:key": "label-size",
-		"stanza:type": "number",
-		"stanza:example": "12",
-		"stanza:description": "font size of labels"
-	},
-	{
 		"stanza:key": "title-of-xaxis",
 		"stanza:type": "string",
 		"stanza:example": "title of Xaxis",
@@ -446,24 +217,6 @@ var metadata = {
 		"stanza:description": "title of legends"
 	},
 	{
-		"stanza:key": "title-size",
-		"stanza:type": "number",
-		"stanza:example": "12",
-		"stanza:description": "font size of titles"
-	},
-	{
-		"stanza:key": "axis-color",
-		"stanza:type": "color",
-		"stanza:example": "#333",
-		"stanza:description": "color of axis"
-	},
-	{
-		"stanza:key": "axis-width",
-		"stanza:type": "number",
-		"stanza:example": "1",
-		"stanza:description": "width of axis"
-	},
-	{
 		"stanza:key": "xgrid",
 		"stanza:type": "Boolean",
 		"stanza:example": false,
@@ -474,24 +227,6 @@ var metadata = {
 		"stanza:type": "Boolean",
 		"stanza:example": false,
 		"stanza:description": "display of y grids"
-	},
-	{
-		"stanza:key": "stroke-color",
-		"stanza:type": "color",
-		"stanza:example": "#333",
-		"stanza:description": "symbol type of plot."
-	},
-	{
-		"stanza:key": "stroke-width",
-		"stanza:type": "number",
-		"stanza:example": "1",
-		"stanza:description": "stroke width"
-	},
-	{
-		"stanza:key": "opacity",
-		"stanza:type": "number",
-		"stanza:example": "0.7",
-		"stanza:description": "opacity of each plots"
 	},
 	{
 		"stanza:key": "symbol-type",
@@ -513,6 +248,60 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#ec7d8d",
 		"stanza:description": "emphasized color when you hover on labels and rects"
+	},
+	{
+		"stanza:key": "--tick-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "tick color"
+	},
+	{
+		"stanza:key": "--label-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "label color"
+	},
+	{
+		"stanza:key": "--axis-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "color of axis"
+	},
+	{
+		"stanza:key": "--title-size",
+		"stanza:type": "number",
+		"stanza:default": "12",
+		"stanza:description": "font size of titles"
+	},
+	{
+		"stanza:key": "--label-size",
+		"stanza:type": "number",
+		"stanza:default": "12",
+		"stanza:description": "emphasized color when you hover on labels and rects"
+	},
+	{
+		"stanza:key": "--axis-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "width of axis"
+	},
+	{
+		"stanza:key": "--stroke-color",
+		"stanza:type": "color",
+		"stanza:default": "#333",
+		"stanza:description": "symbol type of plot."
+	},
+	{
+		"stanza:key": "--stroke-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "stroke width"
+	},
+	{
+		"stanza:key": "--opacity",
+		"stanza:type": "text",
+		"stanza:default": "0.7",
+		"stanza:description": "opacity of each plots"
 	}
 ]
 };
