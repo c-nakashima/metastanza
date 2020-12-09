@@ -2,9 +2,9 @@
   "@context": {
     "stanza": "http://togostanza.org/resource/stanza#"
   },
-  "@id": "table_with_pagenation",
-  "stanza:label": "table with pagenation",
-  "stanza:definition": "metastanza table with pagenation",
+  "@id": "table",
+  "stanza:label": "Table",
+  "stanza:definition": "metastanza table with scroll",
   "stanza:type": "Stanza",
   "stanza:display": "Table",
   "stanza:provider": "Togostanza",
@@ -12,8 +12,8 @@
   "stanza:author": "c-nakashima",
   "stanza:address": "nakashima@penqe.com",
   "stanza:contributor": [],
-  "stanza:created": "2020-12-09",
-  "stanza:updated": "2020-12-09",
+  "stanza:created": "2020-12-02",
+  "stanza:updated": "2020-12-02",
   "stanza:parameter": [
     {
       "stanza:key": "say-to",
