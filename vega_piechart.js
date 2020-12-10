@@ -12,10 +12,7 @@ async function vegaPiechart(stanza, params) {
   // spec.height = params["height"]
   // spec.autosize = params["autosize"]
 
-// カラースキームを独自で作成したい
-  // vega.scheme('metastabasic', ['#AB3F61', '#F7EF8D', '#F7749E', '#5CD5F7', '#4895AB', '#4895AB']);
-  // spec.scales[0].range.scheme = 'pastel1';
-  // spec.scales[0].range.scheme = params["color-scheme"];
+// scales: カラースキームを指定
   spec.scales[0].range = [
     'var(--series-0-color)',
     'var(--series-1-color)',
@@ -25,42 +22,14 @@ async function vegaPiechart(stanza, params) {
     'var(--series-5-color)'
   ];
 
-//legendを出す
-  spec.legend =[
-  {
-    "fill": "color",
-    "encode": {
-      "title": {
-        "update": {
-          "fontSize": {"value": 14}
-        }
-      },
-      "labels": {
-        "interactive": true,
-        "update": {
-          "fontSize": {"value": 12},
-          "fill": {"value": "black"}
-        },
-        "hover": {
-          "fill": {"value": "firebrick"}
-        }
-      },
-      "symbols": {
-        "update": {
-          "stroke": {"value": "transparent"}
-        }
-      },
-      "legend": {
-        "update": {
-          "stroke": {"value": "#ccc"},
-          "strokeWidth": {"value": 1.5}
-        }
-      }
-    }
-  }
-];
 
-//円の描画について（表示されているパラメータを消したい・・・） 
+//円の描画について
+  //（デフォルトのコントローラを削除） 
+  for (let signal of spec.signals)
+    { 
+      delete(signal.bind); 
+    } 
+  
   spec.signals[2].value = params["inner-padding-angle"];
   spec.signals[3].value = params["inner-radius"];
 
@@ -84,6 +53,30 @@ async function vegaPiechart(stanza, params) {
     }
   };
   
+  //legendを出す
+  spec.legends =
+  [
+    {
+      "fill": "color",
+      "title": params["title-of-legend"],
+      "orient": "top-right",
+      "encode": {
+        // "symbols": {"enter": {"fillOpacity": {"value": 0.5}}},
+        "labels": {"update": {"text": {"field": "value"}}}
+      }
+      // ,
+      // "legend":{
+      //   "layout": {
+      //     "bottom": {
+      //       "anchor": "middle",
+      //       "direction": "vertical",
+      //       "center": true,
+      //       "margin": 2,
+      //     }
+      //   }
+      // } 
+    }
+  ];
 
   const el = stanza.root.querySelector("main");
   const opts = {
@@ -158,6 +151,12 @@ var metadata = {
 		"stanza:example": "0",
 		"stanza:description": "inner radius of your pie.(0-99)",
 		"stanza:required": false
+	},
+	{
+		"stanza:key": "title-of-legend",
+		"stanza:type": "string",
+		"stanza:example": "Title of this legend",
+		"stanza:description": "title of legends"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
