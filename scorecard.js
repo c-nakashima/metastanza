@@ -48,7 +48,7 @@ var metadata = {
 		"stanza:description": "text align of greeting"
 	},
 	{
-		"stanza:key": "--basic-fill-color",
+		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
 		"stanza:default": "#94d0da",
 		"stanza:description": "basic fill color"
@@ -58,7 +58,7 @@ var metadata = {
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "\n<style>\n</style>\n\n<svg width=\"200\" height=\"200\">\n  <text x=\"30\" y=\"30\" font-family=\"sans-serif\" font-size=\"30px\" fill=\"var(--basic-fill-color)\">Hello!</text>\n</svg>\n      \n";
+    return "\n<style>\n</style>\n\n<svg width=\"200\" height=\"200\">\n  <text x=\"30\" y=\"30\" font-family=\"sans-serif\" font-size=\"30px\" fill=\"var(--series-0-color)\">Hello!</text>\n</svg>\n      \n";
 },"useData":true}]
 ];
 

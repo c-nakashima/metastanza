@@ -23,15 +23,16 @@ async function vegaScatterplot(stanza, params) {
   spec.axes =[
     {
       "scale": "x",
-      "grid": params["xgrid"],
+      "grid" : true,
+      // "grid": getComputedStyle(stanza.root.host).getPropertyValue(params["xgrid"]),
       "domain": false,
-      "orient": params["orient-of-xscale"],
+      "orient": params["orient-of-xaxis"],
       "tickCount": 5,
       "title": params["title-of-xaxis"],
       "encode": {
           "ticks": {
             "update": {
-            "stroke": {"value": "var(--tick-color)"}
+            "stroke": {"value": "var(--axis-color)"}
             }
           },
           "labels": {
@@ -61,9 +62,10 @@ async function vegaScatterplot(stanza, params) {
     },
     {
       "scale": "y",
-      "grid": params["ygrid"],
+      "grid" : true,
+      // "grid": getComputedStyle(stanza.root.host).getPropertyValue(params["ygrid"]),
       "domain": false,
-      "orient": params["orient-of-yscale"],
+      "orient": params["orient-of-yaxis"],
       "titlePadding": 5,
       "title": params["title-of-yaxis"],
       "encode": {
@@ -108,7 +110,7 @@ async function vegaScatterplot(stanza, params) {
       "symbolStrokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
       "symbolOpacity": getComputedStyle(stanza.root.host).getPropertyValue("--opacity"),
       "symbolType": params["symbol-type"],
-      "symbolFillColor": {"value": "var(--basic-fill-color)"},
+      "symbolFillColor": {"value": "var(--series-0-color)"},
       "labelFont": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
       "labelFontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--title-size")},
       "titleFont": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")}
@@ -129,7 +131,7 @@ async function vegaScatterplot(stanza, params) {
         "strokeWidth": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--stroke-width")},
         "opacity": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--opacity")},
         "stroke": {"value": "var(--stroke-color)"},
-        "fill": {"value": "var(--basic-fill-color)"}
+        "fill": {"value": "var(--series-0-color)"}
       },
       "hover": {
         "fill": {"value": "var(--emphasized-color)"},
@@ -194,16 +196,16 @@ var metadata = {
 		"stanza:description": "padding around your stanza"
 	},
 	{
-		"stanza:key": "orient-of-xscale",
+		"stanza:key": "orient-of-xaxis",
 		"stanza:type": "string",
 		"stanza:example": "bottom",
-		"stanza:description": "orient of xscale.(please select top or bottom)"
+		"stanza:description": "orient of X-axis.(please select top or bottom)"
 	},
 	{
-		"stanza:key": "orient-of-yscale",
+		"stanza:key": "orient-of-yaxis",
 		"stanza:type": "string",
 		"stanza:example": "left",
-		"stanza:description": "orient of yscale.(please select left or right)"
+		"stanza:description": "orient of Y-axis.(please select left or right)"
 	},
 	{
 		"stanza:key": "title-of-xaxis",
@@ -225,15 +227,15 @@ var metadata = {
 	},
 	{
 		"stanza:key": "xgrid",
-		"stanza:type": "Boolean",
-		"stanza:example": false,
-		"stanza:description": "display of x grids"
+		"stanza:type": "boolean",
+		"stanza:example": true,
+		"stanza:description": "display of X-grids"
 	},
 	{
 		"stanza:key": "ygrid",
-		"stanza:type": "Boolean",
-		"stanza:example": false,
-		"stanza:description": "display of y grids"
+		"stanza:type": "boolean",
+		"stanza:example": true,
+		"stanza:description": "display of Y-grids"
 	},
 	{
 		"stanza:key": "symbol-type",
@@ -245,7 +247,7 @@ var metadata = {
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--basic-fill-color",
+		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
 		"stanza:default": "#4682b4",
 		"stanza:description": "color of plot"
@@ -255,12 +257,6 @@ var metadata = {
 		"stanza:type": "color",
 		"stanza:default": "#ec7d8d",
 		"stanza:description": "emphasized color when you hover on labels and rects"
-	},
-	{
-		"stanza:key": "--tick-color",
-		"stanza:type": "color",
-		"stanza:default": "#333",
-		"stanza:description": "tick color"
 	},
 	{
 		"stanza:key": "--label-color",

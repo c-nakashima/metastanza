@@ -40,7 +40,25 @@ var metadata = {
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--basic-fill-color",
+		"stanza:key": "--general-font-family",
+		"stanza:type": "text",
+		"stanza:default": "Helvetica",
+		"stanza:description": "general font family"
+	},
+	{
+		"stanza:key": "--general-font-color",
+		"stanza:type": "color",
+		"stanza:default": "#707070",
+		"stanza:description": "general font color"
+	},
+	{
+		"stanza:key": "--general-font-size",
+		"stanza:type": "number",
+		"stanza:default": "12px",
+		"stanza:description": "general font size"
+	},
+	{
+		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
 		"stanza:default": "#256d80",
 		"stanza:description": "basic fill color"
@@ -58,40 +76,34 @@ var metadata = {
 		"stanza:description": "background color"
 	},
 	{
-		"stanza:key": "--title-size",
-		"stanza:type": "number",
-		"stanza:default": "12px",
-		"stanza:description": "font size of titles"
-	},
-	{
 		"stanza:key": "--ruled-line",
 		"stanza:type": "text",
 		"stanza:default": "0.5px solid #eee",
 		"stanza:description": "style of ruled line"
 	},
 	{
-		"stanza:key": "--stroke-color",
-		"stanza:type": "color",
-		"stanza:default": "#999",
-		"stanza:description": "border color"
-	},
-	{
-		"stanza:key": "--stroke-width",
+		"stanza:key": "--stack-line",
 		"stanza:type": "text",
-		"stanza:default": "0.5px",
-		"stanza:description": "stroke wodth"
+		"stanza:default": "1px solid #333",
+		"stanza:description": "style of stack line"
 	},
 	{
-		"stanza:key": "--label-color",
-		"stanza:type": "color",
-		"stanza:default": "#555",
-		"stanza:description": "font color of labels"
+		"stanza:key": "--thead-font-size",
+		"stanza:type": "number",
+		"stanza:default": "12px",
+		"stanza:description": "font size of labels"
 	},
 	{
-		"stanza:key": "--label-size",
+		"stanza:key": "--tbody-font-size",
 		"stanza:type": "number",
 		"stanza:default": "10px",
 		"stanza:description": "font size of labels"
+	},
+	{
+		"stanza:key": "--thead-font-color",
+		"stanza:type": "color",
+		"stanza:default": "--series-0-color",
+		"stanza:description": "font color of table header"
 	},
 	{
 		"stanza:key": "--label-font",
@@ -119,7 +131,7 @@ var templates = [
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\n* {\n  font-family: var(--label-font);\n  box-sizing: border-box;\n  margin: 0;\n  list-style: none;\n  color: var(--label-color);\n}\n\n.container {\n  width: 800px;\n}\n\n.infomation {\n  width: 100%;\n  height: 47px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.search-form {\n  height: 20px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n\n.search-box {\n  margin-right: 5px;\n  height: 20px;\n  width: 164px;\n  border: 1px solid var(--basic-fill-color);\n  border-radius: 3px;\n  font-size: 10px;\n  color: #c1c0c0;\n}\n\n::placeholder {\n  color: #eaeaea;\n}\n\n.search-btn {\n  margin-right: 2px;\n  height: 20px;\n  width: 20px;\n  border: 1px solid var(--basic-fill-color);\n  border-radius: 3px;\n  background-color: var(--basic-fill-color);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n\n.search-btn img {\n  width: 12px;\n  height: 12px;\n  display: block;\n}\n\n.dl-btn img {\n  width: 18px;\n  height: 18px;\n}\n\ntable {\n  width: inherit;\n  text-align: left;\n  border-collapse: collapse;\n  margin: 0;\n  background-color: var(--background-color);\n  box-shadow: 1px 1px 3px 1px #eee;\n}\n\nthead {\n  font-size: var(--title-size);\n  border-bottom: 1px solid var(--stroke-color);\n  margin-bottom: 0;\n  padding: 8px 8px 0 8px;\n}\n\nthead > tr > td {\n  color: var(--basic-fill-color);\n}\n\nthead > tr > td > .icon {\n  cursor: pointer;\n  content: \"\";\n  display: inline-block;\n  width: 9px;\n  height: 13px;\n  background-repeat: no-repeat;\n  background-position: center 5px;\n  background-size: 8px 8px;\n}\n\n.filter-icon {\n  margin-left: 2px;\n  background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);\n}\n\n.sort-icon {\n  background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-sort2.svg);\n}\n\ntbody {\n  font-size: var(--label-size);\n  color: var(--label-color);\n  padding: 0px 8px 0px 8px;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  height: 250px;\n}\n\nthead, tbody {\n  display: block;\n}\n\ntbody tr td:hover {\n  color: var(--emphasized-color);\n}\n\ntd {\n  width: 150px;\n  padding: 5px;\n}\n\ntbody td {\n  border-bottom: var(--ruled-line);\n  border-collapse: collapse;\n}\n\n.stack {\n  border-right: 1px solid var(--stroke-color);\n}\n\n#pagenation {\n  padding-top: 30px;\n  display: flex;\n  justify-content: center;\n}\n\n#pagenation ul {\n  display: flex;\n  font-size: var(--label-size);\n  padding: 0 0 8px 0;\n}\n\n#pagenation li {\n  margin: 4px;\n  padding: 4px;\n}\n\n#pagenation .first-btn, #pagenation .previous-btn, #pagenation .last-btn, #pagenation .next-btn {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n\n#pagenation .first-btn span, #pagenation .previous-btn span {\n  display: block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: transparent transparent var(--basic-fill-color) var(--basic-fill-color);\n  transform: rotate(45deg);\n}\n\n#pagenation .last-btn span, #pagenation .next-btn span {\n  display: block;\n  width: 7px;\n  height: 7px;\n  border: 1px solid;\n  border-color: var(--basic-fill-color) var(--basic-fill-color) transparent transparent;\n  transform: rotate(45deg);\n}\n\n#pagenation .current-btn {\n  color: var(--basic-fill-color);\n  border-bottom: 1px solid var(--basic-fill-color);\n}\n\n.show-info {\n  display: flex;\n  justify-content: center;\n  font-size: var(--label-size);\n  color: var(--basic-fill-color);\n}";
+var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\n* {\n  box-sizing: border-box;\n  margin: 0;\n  list-style: none;\n  font-family: var(--general-font-family);\n  color: var(--general-font-color);\n  font-size: var(--general-font-size);\n}\n\n.container {\n  width: 800px;\n}\n\n.infomation {\n  width: 100%;\n  height: 47px;\n  display: flex;\n  justify-content: space-between;\n}\n\n.search-form {\n  height: 20px;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n\n.search-box {\n  margin-right: 5px;\n  height: 20px;\n  width: 164px;\n  border: 1px solid var(--series-0-color);\n  border-radius: 3px;\n  font-size: 10px;\n  color: #c1c0c0;\n}\n\n::placeholder {\n  color: #eaeaea;\n}\n\n.search-btn {\n  margin-right: 2px;\n  height: 20px;\n  width: 20px;\n  border: 1px solid var(--series-0-color);\n  border-radius: 3px;\n  background-color: var(--series-0-color);\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n\n.search-btn img {\n  width: 12px;\n  height: 12px;\n  display: block;\n}\n\n.dl-btn img {\n  width: 18px;\n  height: 18px;\n}\n\ntable {\n  width: inherit;\n  text-align: left;\n  border-collapse: collapse;\n  margin: 0;\n  background-color: var(--background-color);\n  box-shadow: 1px 1px 3px 1px #eee;\n}\n\nthead {\n  font-size: var(--thead-font-size);\n  border-bottom: var(--stack-line);\n  margin-bottom: 0;\n  padding: 8px 8px 0 8px;\n}\n\nthead > tr > td {\n  color: var(--series-0-color);\n}\n\nthead > tr > td > .icon {\n  cursor: pointer;\n  content: \"\";\n  display: inline-block;\n  width: 9px;\n  height: 13px;\n  background-repeat: no-repeat;\n  background-position: center 5px;\n  background-size: 8px 8px;\n}\n\n.filter-icon {\n  margin-left: 2px;\n  background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-filter2.svg);\n}\n\n.sort-icon {\n  background-image: url(https://raw.githubusercontent.com/c-nakashima/metastanza/master/assets/grey-sort2.svg);\n}\n\ntbody {\n  font-size: var(--tbody-font-size);\n  color: var(--thead-font-color);\n  padding: 0px 8px;\n  overflow-x: hidden;\n  overflow-y: scroll;\n  height: 250px;\n}\n\nthead, tbody {\n  display: block;\n}\n\ntbody tr td:hover {\n  color: var(--emphasized-color);\n}\n\ntd {\n  width: 150px;\n  padding: 5px;\n}\n\ntbody td {\n  border-bottom: var(--ruled-line);\n  border-collapse: collapse;\n}\n\n.stack {\n  border-right: var(--stack-line);\n}\n\n.show-info {\n  display: flex;\n  justify-content: center;\n}";
 
 defineStanzaElement(table, {metadata, templates, css, url: import.meta.url});
 //# sourceMappingURL=table.js.map
