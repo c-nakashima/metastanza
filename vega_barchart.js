@@ -103,8 +103,7 @@ async function vegaBarchart(stanza, params) {
       "x": {"scale": "xscale", "field": "category"},
       "width": {"scale": "xscale", "band": params["bar-width"]},
       "y": {"scale": "yscale", "field": "amount"},
-      "y2": {"scale": "yscale", "value": 0},
-      // "stroke": {"value": "#652c90"}   
+      "y2": {"scale": "yscale", "value": 0}  
     },
     "update": {
       "fill": {"value": "var(--series-0-color)"},
@@ -189,28 +188,28 @@ var metadata = {
 		"stanza:description": "padding around your stanza"
 	},
 	{
-		"stanza:key": "orient-of-xscale",
+		"stanza:key": "orient-of-xaxis",
 		"stanza:type": "string",
 		"stanza:example": "bottom",
-		"stanza:description": "orient of xscale.(please select top or bottom)"
+		"stanza:description": "orient of X-axis.(please select top or bottom)"
 	},
 	{
-		"stanza:key": "orient-of-yscale",
+		"stanza:key": "orient-of-yaxis",
 		"stanza:type": "string",
 		"stanza:example": "left",
-		"stanza:description": "orient of yscale.(please select left or right)"
+		"stanza:description": "orient of Y-axis.(please select left or right)"
 	},
 	{
 		"stanza:key": "title-of-xaxis",
 		"stanza:type": "string",
 		"stanza:example": "title of Xaxis",
-		"stanza:description": "title of Xaxis"
+		"stanza:description": "title of X-axis"
 	},
 	{
 		"stanza:key": "title-of-yaxis",
 		"stanza:type": "string",
 		"stanza:example": "title of Yaxis",
-		"stanza:description": "title of Yaxis"
+		"stanza:description": "title of Y-axis"
 	},
 	{
 		"stanza:key": "bar-width",
