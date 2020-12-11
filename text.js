@@ -14,7 +14,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "text",
-	"stanza:label": "Text",
+	"stanza:label": "PENQE_Text",
 	"stanza:definition": "",
 	"stanza:type": "Stanza",
 	"stanza:display": "Text",

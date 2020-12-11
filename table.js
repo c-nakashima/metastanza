@@ -17,7 +17,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "table",
-	"stanza:label": "Table",
+	"stanza:label": "PENQE_Table with scroll",
 	"stanza:definition": "metastanza table with scroll",
 	"stanza:type": "Stanza",
 	"stanza:display": "Table",

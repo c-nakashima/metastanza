@@ -38,14 +38,14 @@ async function vegaBarchart(stanza, params) {
   spec.axes[0].encode = {
     "ticks": {
       "update": {
-      "stroke": {"value": "var(--tick-color)"}
+      "stroke": {"value": "var(--label-color)"}
       }
     },
     "labels": {
       "interactive": true,
       "update": {
         "fill": {"value": "var(--label-color)"},
-        "font":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
+        "labelFont":{"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-font")},
         "fontSize": {"value": getComputedStyle(stanza.root.host).getPropertyValue("--label-size")},
       },
       "hover": {
@@ -150,7 +150,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "vega_barchart",
-	"stanza:label": "Vega barchart",
+	"stanza:label": "PENQE_Vega barchart",
 	"stanza:definition": "vega_wrapping_barchart",
 	"stanza:type": "Stanza",
 	"stanza:display": "Chart",

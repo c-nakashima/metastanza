@@ -118,7 +118,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "vega_tree",
-	"stanza:label": "Vega Tree",
+	"stanza:label": "PENQE_Vega Tree",
 	"stanza:definition": "vega_wrapping_tree",
 	"stanza:type": "Stanza",
 	"stanza:display": "Tree",

@@ -14,7 +14,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "scorecard",
-	"stanza:label": "Scorecard",
+	"stanza:label": "PENQE_Scorecard",
 	"stanza:definition": "scorecard",
 	"stanza:type": "Stanza",
 	"stanza:display": "Image",

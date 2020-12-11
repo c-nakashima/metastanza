@@ -152,7 +152,7 @@ var metadata = {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "vega_scatterplot",
-	"stanza:label": "Vega scatterplot",
+	"stanza:label": "PENQE_Vega scatterplot",
 	"stanza:definition": "vega_wrapping_scatterplot",
 	"stanza:type": "Stanza",
 	"stanza:display": "Graph",
