@@ -1,419 +1,365 @@
-import { d as defineStanzaElement } from './stanza-element-d1cc4290.js';
-import { o as ordinal, i as initRange, r as range$1, a as array, c as constant, l as linear, m as max } from './array-2b5f08c6.js';
-import './timer-a7d16713.js';
-import { m as metastanza, s as select } from './metastanza_utils-45dc80dd.js';
-
-var slice = Array.prototype.slice;
-
-function identity(x) {
-  return x;
-}
-
-var top = 1,
-    right = 2,
-    bottom = 3,
-    left = 4,
-    epsilon = 1e-6;
-
-function translateX(x) {
-  return "translate(" + (x + 0.5) + ",0)";
-}
-
-function translateY(y) {
-  return "translate(0," + (y + 0.5) + ")";
-}
-
-function number(scale) {
-  return d => +scale(d);
-}
-
-function center(scale) {
-  var offset = Math.max(0, scale.bandwidth() - 1) / 2; // Adjust for 0.5px offset.
-  if (scale.round()) offset = Math.round(offset);
-  return function(d) {
-    return +scale(d) + offset;
-  };
-}
-
-function entering() {
-  return !this.__axis;
-}
-
-function axis(orient, scale) {
-  var tickArguments = [],
-      tickValues = null,
-      tickFormat = null,
-      tickSizeInner = 6,
-      tickSizeOuter = 6,
-      tickPadding = 3,
-      k = orient === top || orient === left ? -1 : 1,
-      x = orient === left || orient === right ? "x" : "y",
-      transform = orient === top || orient === bottom ? translateX : translateY;
-
-  function axis(context) {
-    var values = tickValues == null ? (scale.ticks ? scale.ticks.apply(scale, tickArguments) : scale.domain()) : tickValues,
-        format = tickFormat == null ? (scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments) : identity) : tickFormat,
-        spacing = Math.max(tickSizeInner, 0) + tickPadding,
-        range = scale.range(),
-        range0 = +range[0] + 0.5,
-        range1 = +range[range.length - 1] + 0.5,
-        position = (scale.bandwidth ? center : number)(scale.copy()),
-        selection = context.selection ? context.selection() : context,
-        path = selection.selectAll(".domain").data([null]),
-        tick = selection.selectAll(".tick").data(values, scale).order(),
-        tickExit = tick.exit(),
-        tickEnter = tick.enter().append("g").attr("class", "tick"),
-        line = tick.select("line"),
-        text = tick.select("text");
-
-    path = path.merge(path.enter().insert("path", ".tick")
-        .attr("class", "domain")
-        .attr("stroke", "currentColor"));
-
-    tick = tick.merge(tickEnter);
-
-    line = line.merge(tickEnter.append("line")
-        .attr("stroke", "currentColor")
-        .attr(x + "2", k * tickSizeInner));
-
-    text = text.merge(tickEnter.append("text")
-        .attr("fill", "currentColor")
-        .attr(x, k * spacing)
-        .attr("dy", orient === top ? "0em" : orient === bottom ? "0.71em" : "0.32em"));
-
-    if (context !== selection) {
-      path = path.transition(context);
-      tick = tick.transition(context);
-      line = line.transition(context);
-      text = text.transition(context);
-
-      tickExit = tickExit.transition(context)
-          .attr("opacity", epsilon)
-          .attr("transform", function(d) { return isFinite(d = position(d)) ? transform(d) : this.getAttribute("transform"); });
-
-      tickEnter
-          .attr("opacity", epsilon)
-          .attr("transform", function(d) { var p = this.parentNode.__axis; return transform(p && isFinite(p = p(d)) ? p : position(d)); });
-    }
-
-    tickExit.remove();
-
-    path
-        .attr("d", orient === left || orient == right
-            ? (tickSizeOuter ? "M" + k * tickSizeOuter + "," + range0 + "H0.5V" + range1 + "H" + k * tickSizeOuter : "M0.5," + range0 + "V" + range1)
-            : (tickSizeOuter ? "M" + range0 + "," + k * tickSizeOuter + "V0.5H" + range1 + "V" + k * tickSizeOuter : "M" + range0 + ",0.5H" + range1));
-
-    tick
-        .attr("opacity", 1)
-        .attr("transform", function(d) { return transform(position(d)); });
-
-    line
-        .attr(x + "2", k * tickSizeInner);
-
-    text
-        .attr(x, k * spacing)
-        .text(format);
-
-    selection.filter(entering)
-        .attr("fill", "none")
-        .attr("font-size", 10)
-        .attr("font-family", "sans-serif")
-        .attr("text-anchor", orient === right ? "start" : orient === left ? "end" : "middle");
-
-    selection
-        .each(function() { this.__axis = position; });
-  }
-
-  axis.scale = function(_) {
-    return arguments.length ? (scale = _, axis) : scale;
-  };
-
-  axis.ticks = function() {
-    return tickArguments = slice.call(arguments), axis;
-  };
-
-  axis.tickArguments = function(_) {
-    return arguments.length ? (tickArguments = _ == null ? [] : slice.call(_), axis) : tickArguments.slice();
-  };
-
-  axis.tickValues = function(_) {
-    return arguments.length ? (tickValues = _ == null ? null : slice.call(_), axis) : tickValues && tickValues.slice();
-  };
-
-  axis.tickFormat = function(_) {
-    return arguments.length ? (tickFormat = _, axis) : tickFormat;
-  };
-
-  axis.tickSize = function(_) {
-    return arguments.length ? (tickSizeInner = tickSizeOuter = +_, axis) : tickSizeInner;
-  };
-
-  axis.tickSizeInner = function(_) {
-    return arguments.length ? (tickSizeInner = +_, axis) : tickSizeInner;
-  };
-
-  axis.tickSizeOuter = function(_) {
-    return arguments.length ? (tickSizeOuter = +_, axis) : tickSizeOuter;
-  };
-
-  axis.tickPadding = function(_) {
-    return arguments.length ? (tickPadding = +_, axis) : tickPadding;
-  };
-
-  return axis;
-}
-
-function axisBottom(scale) {
-  return axis(bottom, scale);
-}
-
-function axisLeft(scale) {
-  return axis(left, scale);
-}
-
-function band() {
-  var scale = ordinal().unknown(undefined),
-      domain = scale.domain,
-      ordinalRange = scale.range,
-      r0 = 0,
-      r1 = 1,
-      step,
-      bandwidth,
-      round = false,
-      paddingInner = 0,
-      paddingOuter = 0,
-      align = 0.5;
-
-  delete scale.unknown;
-
-  function rescale() {
-    var n = domain().length,
-        reverse = r1 < r0,
-        start = reverse ? r1 : r0,
-        stop = reverse ? r0 : r1;
-    step = (stop - start) / Math.max(1, n - paddingInner + paddingOuter * 2);
-    if (round) step = Math.floor(step);
-    start += (stop - start - step * (n - paddingInner)) * align;
-    bandwidth = step * (1 - paddingInner);
-    if (round) start = Math.round(start), bandwidth = Math.round(bandwidth);
-    var values = range$1(n).map(function(i) { return start + step * i; });
-    return ordinalRange(reverse ? values.reverse() : values);
-  }
-
-  scale.domain = function(_) {
-    return arguments.length ? (domain(_), rescale()) : domain();
-  };
-
-  scale.range = function(_) {
-    return arguments.length ? ([r0, r1] = _, r0 = +r0, r1 = +r1, rescale()) : [r0, r1];
-  };
-
-  scale.rangeRound = function(_) {
-    return [r0, r1] = _, r0 = +r0, r1 = +r1, round = true, rescale();
-  };
-
-  scale.bandwidth = function() {
-    return bandwidth;
-  };
-
-  scale.step = function() {
-    return step;
-  };
-
-  scale.round = function(_) {
-    return arguments.length ? (round = !!_, rescale()) : round;
-  };
-
-  scale.padding = function(_) {
-    return arguments.length ? (paddingInner = Math.min(1, paddingOuter = +_), rescale()) : paddingInner;
-  };
-
-  scale.paddingInner = function(_) {
-    return arguments.length ? (paddingInner = Math.min(1, _), rescale()) : paddingInner;
-  };
-
-  scale.paddingOuter = function(_) {
-    return arguments.length ? (paddingOuter = +_, rescale()) : paddingOuter;
-  };
-
-  scale.align = function(_) {
-    return arguments.length ? (align = Math.max(0, Math.min(1, _)), rescale()) : align;
-  };
-
-  scale.copy = function() {
-    return band(domain(), [r0, r1])
-        .round(round)
-        .paddingInner(paddingInner)
-        .paddingOuter(paddingOuter)
-        .align(align);
-  };
-
-  return initRange.apply(rescale(), arguments);
-}
-
-function none(series, order) {
-  if (!((n = series.length) > 1)) return;
-  for (var i = 1, j, s0, s1 = series[order[0]], n, m = s1.length; i < n; ++i) {
-    s0 = s1, s1 = series[order[i]];
-    for (j = 0; j < m; ++j) {
-      s1[j][1] += s1[j][0] = isNaN(s0[j][1]) ? s0[j][0] : s0[j][1];
-    }
-  }
-}
-
-function none$1(series) {
-  var n = series.length, o = new Array(n);
-  while (--n >= 0) o[n] = n;
-  return o;
-}
-
-function stackValue(d, key) {
-  return d[key];
-}
-
-function stackSeries(key) {
-  const series = [];
-  series.key = key;
-  return series;
-}
-
-function stack() {
-  var keys = constant([]),
-      order = none$1,
-      offset = none,
-      value = stackValue;
-
-  function stack(data) {
-    var sz = Array.from(keys.apply(this, arguments), stackSeries),
-        i, n = sz.length, j = -1,
-        oz;
-
-    for (const d of data) {
-      for (i = 0, ++j; i < n; ++i) {
-        (sz[i][j] = [0, +value(d, sz[i].key, j, data)]).data = d;
-      }
-    }
-
-    for (i = 0, oz = array(order(sz)); i < n; ++i) {
-      sz[oz[i]].index = i;
-    }
-
-    offset(sz, oz);
-    return sz;
-  }
-
-  stack.keys = function(_) {
-    return arguments.length ? (keys = typeof _ === "function" ? _ : constant(Array.from(_)), stack) : keys;
-  };
-
-  stack.value = function(_) {
-    return arguments.length ? (value = typeof _ === "function" ? _ : constant(+_), stack) : value;
-  };
-
-  stack.order = function(_) {
-    return arguments.length ? (order = _ == null ? none$1 : typeof _ === "function" ? _ : constant(Array.from(_)), stack) : order;
-  };
-
-  stack.offset = function(_) {
-    return arguments.length ? (offset = _ == null ? none : _, stack) : offset;
-  };
-
-  return stack;
-}
-
-function ascending(series) {
-  var sums = series.map(sum);
-  return none$1(series).sort(function(a, b) { return sums[a] - sums[b]; });
-}
-
-function sum(series) {
-  var s = 0, i = -1, n = series.length, v;
-  while (++i < n) if (v = +series[i][1]) s += v;
-  return s;
-}
-
-function descending(series) {
-  return ascending(series).reverse();
-}
+import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
+import { e as embed } from './vega-embed.module-414e3eaf.js';
+import { l as loadData } from './load-data-a2861a31.js';
+import { a as appendDlButton } from './metastanza_utils-0648515a.js';
+import './vega.module-f322150d.js';
+import './dsv-cd3740c6.js';
+import './timer-be811b16.js';
+import './index-b2de29ee.js';
 
 async function barchart(stanza, params) {
-  
-  stanza.render({
-    template: 'stanza.html.hbs',
-    parameters: {
-      title: params.title
+  function css(key) {
+    return getComputedStyle(stanza.root.host).getPropertyValue(key);
+  }
+  const chartType = params["chart-type"];
+
+  //width,height,padding
+  const width = Number(params["width"]);
+  const height = Number(params["height"]);
+  const padding = Number(params["padding"]);
+
+  //data
+  const labelVariable = params["category"]; //x
+  const valueVariable = params["value"]; //y
+  const groupVariable = params["group-by"] ? params["group-by"] : "none"; //z
+
+  const values = await loadData(params["data-url"], params["data-type"]);
+
+  function constructData(chartType) {
+    switch (chartType) {
+      case "grouped":
+        return [
+          {
+            name: "table",
+            values,
+          },
+        ];
+      case "stacked":
+        return [
+          {
+            name: "table",
+            values,
+            transform: [
+              {
+                type: "stack",
+                field: valueVariable,
+                groupby: [labelVariable],
+                sort: { field: groupVariable },
+              },
+            ],
+          },
+        ];
     }
-  });
-  
-  const element = stanza.root.querySelector('#chart');
-  //const dataset = await metastanza.getJsonFromSparql(params.api, element, params.post_params, params.label_var_name, params.value_var_name);
-  const dataset = await metastanza.getFormatedJson(params.api, element, params.post_params);
-  if (typeof(dataset) === "object") draw(stanza.root.querySelector('#chart'), dataset);
+  }
+
+  const getTitle = function (
+    stackedParamsTitle,
+    stackedDefaultTitle,
+    groupedParamsTitle,
+    groupedDefaultTitle
+  ) {
+    switch (chartType) {
+      case "stacked":
+        return stackedParamsTitle === ""
+          ? stackedDefaultTitle
+          : stackedParamsTitle;
+      case "grouped":
+        return groupedParamsTitle === ""
+          ? groupedDefaultTitle
+          : groupedParamsTitle;
+    }
+  };
+
+  const axes = [
+    {
+      scale: "xscale",
+      orient: params["xaxis-placement"],
+      domainColor: "var(--axis-color)",
+      domainWidth: css("--axis-width"),
+      grid: params["xgrid"] === "true",
+      gridColor: "var(--grid-color)",
+      gridDash: css("--grid-dash-length"),
+      gridOpacity: css("--grid-opacity"),
+      gridWidth: css("--grid-width"),
+      ticks: params["xtick"] === "true",
+      tickColor: "var(--tick-color)",
+      tickSize: css("--tick-length"),
+      tickWidth: css("--tick-width"),
+      title: getTitle(
+        params["category-title"],
+        labelVariable,
+        params["value-title"],
+        valueVariable
+      ),
+      titleColor: "var(--title-font-color)",
+      titleFont: css("--font-family"),
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
+      titlePadding: params["xtitle-padding"],
+      labelPadding: params["xlabel-padding"],
+      encode: {
+        labels: {
+          interactive: true,
+          update: {
+            angle: { value: params["xlabel-angle"] },
+            fill: { value: "var(--label-font-color)" },
+            font: { value: css("--font-family") },
+            fontSize: { value: css("--label-font-size") },
+          },
+        },
+      },
+    },
+    {
+      scale: "yscale",
+      orient: params["yaxis-placement"],
+      domainColor: "var(--axis-color)",
+      domainWidth: css("--axis-width"),
+      grid: params["ygrid"] === "true",
+      gridColor: "var(--grid-color)",
+      gridDash: css("--grid-dash-length"),
+      gridOpacity: css("--grid-opacity"),
+      gridWidth: css("--grid-width"),
+      ticks: params["ytick"] === "true",
+      tickColor: "var(--tick-color)",
+      tickSize: css("--tick-length"),
+      tickWidth: css("--tick-width"),
+      title: getTitle(
+        params["value-title"],
+        valueVariable,
+        params["category-title"],
+        labelVariable
+      ),
+      titleColor: "var(--title-font-color)",
+      titleFont: css("--font-family"),
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
+      titlePadding: params["ytitle-padding"],
+      labelPadding: params["ylabel-padding"],
+      zindex: 0,
+      encode: {
+        labels: {
+          interactive: true,
+          update: {
+            angle: { value: params["ylabel-angle"] },
+            fill: { value: "var(--label-font-color)" },
+            font: {
+              value: css("--font-family"),
+            },
+            fontSize: { value: css("--label-font-size") },
+            // limit: 1
+          },
+        },
+      },
+    },
+  ];
+
+  // legend
+  const legends = [
+    {
+      fill: "color",
+      orient: "right",
+      // legendX: width + 40,
+      legendY: "0",
+      title: getTitle(
+        params["legend-title"],
+        groupVariable,
+        params["legend-title"],
+        groupVariable
+      ),
+      titleColor: "var(--title-font-color)",
+      titleFont: css("--font-family"),
+      titleFontSize: css("--title-font-size"),
+      titleFontWeight: css("--title-font-weight"),
+      labelColor: "var(--label-font-color)",
+      labelFont: css("--font-family"),
+      labelFontSize: css("--label-font-size"),
+      symbolStrokeColor: css("--border-color"),
+      symbolStrokeWidth: css("--border-width"),
+    },
+  ];
+
+  const colorScale = {
+    name: "color",
+    type: "ordinal",
+    domain: { data: "table", field: groupVariable },
+    range: [
+      "var(--series-0-color)",
+      "var(--series-1-color)",
+      "var(--series-2-color)",
+      "var(--series-3-color)",
+      "var(--series-4-color)",
+      "var(--series-5-color)",
+    ],
+  };
+
+  function constructScale(chartType) {
+    switch (chartType) {
+      case "grouped":
+        return [
+          colorScale,
+          {
+            name: "xscale",
+            type: "linear",
+            domain: { data: "table", field: valueVariable },
+            range: "width",
+          },
+          {
+            name: "yscale",
+            type: "band",
+            domain: { data: "table", field: labelVariable },
+            range: "height",
+            padding: 0.2,
+            paddingInner: params["padding-inner"],
+            paddingOuter: params["padding-outer"],
+          },
+        ];
+      case "stacked":
+        return [
+          colorScale,
+          {
+            name: "xscale",
+            type: "band",
+            range: "width",
+            domain: { data: "table", field: labelVariable },
+            paddingInner: params["padding-inner"],
+            paddingOuter: params["padding-outer"],
+          },
+          {
+            name: "yscale",
+            type: "linear",
+            range: "height",
+            nice: true,
+            zero: true,
+            domain: { data: "table", field: "y1" },
+          },
+        ];
+    }
+  }
+
+  function constructMark(chartType) {
+    switch (chartType) {
+      case "grouped":
+        return [
+          {
+            type: "group",
+            from: {
+              facet: {
+                data: "table",
+                name: "facet",
+                groupby: labelVariable,
+              },
+            },
+            encode: {
+              enter: {
+                y: { scale: "yscale", field: labelVariable },
+              },
+            },
+            signals: [{ name: "height", update: "bandwidth('yscale')" }],
+            scales: [
+              {
+                name: "pos",
+                type: "band",
+                range: "height",
+                domain: { data: "facet", field: groupVariable },
+              },
+            ],
+            marks: [
+              {
+                name: "bars",
+                from: { data: "facet" },
+                type: "rect",
+                encode: {
+                  enter: {
+                    y: { scale: "pos", field: groupVariable },
+                    height: { scale: "pos", band: 1 },
+                    x: { scale: "xscale", field: valueVariable },
+                    x2: { scale: "xscale", value: 0 },
+                    fill: { scale: "color", field: groupVariable },
+                    stroke: { value: "var(--border-color)" },
+                    strokeWidth: { value: css("--border-width") },
+                  },
+                },
+              },
+            ],
+          },
+        ];
+      case "stacked":
+        return [
+          {
+            type: "group",
+            from: { data: "table" },
+            encode: {
+              enter: {
+                x: { scale: "xscale", field: labelVariable },
+                width: { scale: "xscale", band: params["bar-width"] },
+                y: { scale: "yscale", field: "y0" },
+                y2: { scale: "yscale", field: "y1" },
+                fill: { scale: "color", field: groupVariable },
+                stroke: { value: "var(--border-color)" },
+                strokeWidth: { value: css("--border-width") },
+              },
+            },
+          },
+        ];
+    }
+  }
+
+  const spec = {
+    $schema: "https://vega.github.io/schema/vega/v5.json",
+    width,
+    height,
+    padding,
+    data: constructData(chartType),
+    scales: constructScale(chartType),
+    axes,
+    legends: params["legend"] === "true" && params["group-by"] ? legends : [],
+    marks: constructMark(chartType),
+  };
+
+  const el = stanza.root.querySelector("main");
+  const opts = {
+    renderer: "svg",
+  };
+  await embed(el, spec, opts);
+
+  //menu button placement
+  appendDlButton(
+    stanza.root.querySelector(".chart-wrapper"),
+    stanza.root.querySelector("svg"),
+    "barchart",
+    stanza
+  );
+
+  const menuButton = stanza.root.querySelector("#dl_button");
+  const menuList = stanza.root.querySelector("#dl_list");
+  switch (params["metastanza-menu-placement"]) {
+    case "top-left":
+      menuButton.setAttribute("class", "dl-top-left");
+      menuList.setAttribute("class", "dl-top-left");
+      break;
+    case "top-right":
+      menuButton.setAttribute("class", "dl-top-right");
+      menuList.setAttribute("class", "dl-top-right");
+      break;
+    case "bottom-left":
+      menuButton.setAttribute("class", "dl-bottom-left");
+      menuList.setAttribute("class", "dl-bottom-left");
+      break;
+    case "bottom-right":
+      menuButton.setAttribute("class", "dl-bottom-right");
+      menuList.setAttribute("class", "dl-bottom-right");
+      break;
+    case "none":
+      menuButton.setAttribute("class", "dl-none");
+      menuList.setAttribute("class", "dl-none");
+      break;
+  }
 }
 
-
-function draw(el, dataset) {
-  let width = 800;
-  let height = 400;
-  let pad_left = 50;
-  let pad_right = 10;
-  let pad_top = 10;
-  let pad_bottom = 130;
-
-  // SVG
-  const svg = select(el).append("svg").attr("width", width).attr("height", height);
-
-  // axis scale
-  let xScale = band()
-      .rangeRound([pad_left, width - pad_right])
-      .padding(0.1)
-      .domain(dataset.data.map(function(d) { return d.label; }));
-  
-  let yScale = linear()
-      .domain( [0, max(dataset.data, function(d) {
-	let sum  = 0;
-	Object.keys(d).forEach(key => { if(key != "label") sum += d[key]; });
-	return sum;
-      }) ])
-      .range([height - pad_bottom, pad_top]);
-  
-  // render axis
-  svg.append("g")
-    .attr("transform", "translate(" + 0 + "," + (height - pad_bottom) + ")")
-    .call(axisBottom(xScale))
-    .selectAll("text")
-    .style("text-anchor", "end")
-    .attr("transform", "rotate(-90)")
-    .attr("dx", "-0.8em")
-    .attr("dy", "-0.6em");
-  
-  svg.append("g")
-    .attr("transform", "translate(" + pad_left + "," + 0 + ")")
-    .call(axisLeft(yScale));
-  
-  let stack$1 = stack().keys(dataset.series).order(descending);
-  let series = stack$1(dataset.data);
-
-  console.log(series);
-  
-  // render bar
-  let data_bar_g = svg.append("g");
-  let series_g = data_bar_g.selectAll(".series")
-      .data(series)
-      .enter()
-      .append("g")
-      .attr("class", function(d, i){ return "series series_" + i; });
-  series_g.selectAll(".bar")
-    .data(function(d) { return d; })
-    .enter()
-    .append("rect")
-    .attr("class", "bar")
-    .attr("x", function(d) { return xScale(d.data.label); })
-    .attr("y", function(d) { return yScale(d[1]); })
-    .attr("width", xScale.bandwidth())
-    .attr("height", function(d) { return yScale(d[0]) - yScale(d[1]); }); 
-
-}
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': barchart
+});
 
 var metadata = {
 	"@context": {
@@ -421,47 +367,233 @@ var metadata = {
 },
 	"@id": "barchart",
 	"stanza:label": "Barchart",
-	"stanza:definition": "",
-	"stanza:type": "MetaStanza",
+	"stanza:definition": "Barchart MetaStanza",
+	"stanza:type": "Stanza",
 	"stanza:display": "Chart",
-	"stanza:provider": "TogoStanza",
+	"stanza:provider": "Togostanza",
 	"stanza:license": "MIT",
-	"stanza:author": "TogoStanza",
-	"stanza:address": "admin@biohackathon.org",
+	"stanza:author": "c_nakashima",
+	"stanza:address": "nakashima@penqe.com",
 	"stanza:contributor": [
 ],
-	"stanza:created": "2020-10-15",
-	"stanza:updated": "2020-10-15",
+	"stanza:created": "2020-11-06",
+	"stanza:updated": "2020-11-06",
 	"stanza:parameter": [
 	{
-		"stanza:key": "api",
-		"stanza:example": "https://db-dev.jpostdb.org/rest/api/metastanza_chart_multi_test",
-		"stanza:description": "URL of API",
+		"stanza:key": "chart-type",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"stacked",
+			"grouped"
+		],
+		"stanza:example": "stacked",
+		"stanza:description": "Type of barchart",
 		"stanza:required": true
 	},
 	{
-		"stanza:key": "post_params",
-		"stanza:example": "type=instrument",
-		"stanza:description": "API parameters for the POST method",
+		"stanza:key": "data-url",
+		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_multi_data_chart",
+		"stanza:description": "Data source URL",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "data-type",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"json",
+			"tsv",
+			"csv",
+			"sparql-results-json"
+		],
+		"stanza:example": "json",
+		"stanza:description": "Data type",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "category",
+		"stanza:example": "chromosome",
+		"stanza:description": "Variable to be assigned as category",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "value",
+		"stanza:example": "count",
+		"stanza:description": "Variable to be assigned as value",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "group-by",
+		"stanza:example": "category",
+		"stanza:description": "Variable to be assigned as group",
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "title",
-		"stanza:example": "Instrument",
-		"stanza:description": "Chart title",
+		"stanza:key": "category-title",
+		"stanza:example": "",
+		"stanza:description": "Title for category variable (In case of blank, 'category variable' name will be assigned)",
 		"stanza:required": false
 	},
 	{
-		"stanza:key": "label_var_name",
+		"stanza:key": "value-title",
 		"stanza:example": "",
-		"stanza:description": "label var name",
-		"stanza:required": true
+		"stanza:description": "Title for value variable (In case of blank, 'value variable' name will be assigned)",
+		"stanza:required": false
 	},
 	{
-		"stanza:key": "value_var_name",
+		"stanza:key": "legend-title",
 		"stanza:example": "",
-		"stanza:description": "value var name",
-		"stanza:required": true
+		"stanza:description": "Title for group variable, which is used as legend title (In case of blank, 'group variable' name will be assigned)",
+		"stanza:required": false
+	},
+	{
+		"stanza:key": "width",
+		"stanza:type": "number",
+		"stanza:example": 400,
+		"stanza:description": "Width"
+	},
+	{
+		"stanza:key": "height",
+		"stanza:type": "number",
+		"stanza:example": 300,
+		"stanza:description": "Height"
+	},
+	{
+		"stanza:key": "padding",
+		"stanza:type": "number",
+		"stanza:example": 50,
+		"stanza:description": "Padding"
+	},
+	{
+		"stanza:key": "padding-inner",
+		"stanza:example": "0.1",
+		"stanza:description": "Padding between each bars (Must be in the range[0,1])"
+	},
+	{
+		"stanza:key": "padding-outer",
+		"stanza:example": "0.4",
+		"stanza:description": "Padding outside of bar group (Must be in the range[0,1])"
+	},
+	{
+		"stanza:key": "xaxis-placement",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"top",
+			"bottom"
+		],
+		"stanza:example": "bottom",
+		"stanza:description": "X axis placement"
+	},
+	{
+		"stanza:key": "yaxis-placement",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"left",
+			"right"
+		],
+		"stanza:example": "left",
+		"stanza:description": "Y axis placement"
+	},
+	{
+		"stanza:key": "xgrid",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": false,
+		"stanza:description": "Show X grid"
+	},
+	{
+		"stanza:key": "ygrid",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": true,
+		"stanza:description": "Show Y grid"
+	},
+	{
+		"stanza:key": "xtick",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": false,
+		"stanza:description": "Show X tick"
+	},
+	{
+		"stanza:key": "ytick",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": true,
+		"stanza:description": "Show Y tick"
+	},
+	{
+		"stanza:key": "xlabel-angle",
+		"stanza:example": "0",
+		"stanza:description": "X label angle (in degree)"
+	},
+	{
+		"stanza:key": "ylabel-angle",
+		"stanza:example": "0",
+		"stanza:description": "Y label angle (in degree)"
+	},
+	{
+		"stanza:key": "xlabel-padding",
+		"stanza:type": "number",
+		"stanza:example": 5,
+		"stanza:description": "Padding between X label and tick"
+	},
+	{
+		"stanza:key": "ylabel-padding",
+		"stanza:type": "number",
+		"stanza:example": 5,
+		"stanza:description": "Padding between Y label and tick"
+	},
+	{
+		"stanza:key": "xtitle-padding",
+		"stanza:type": "number",
+		"stanza:example": 10,
+		"stanza:description": "Padding between X title and label"
+	},
+	{
+		"stanza:key": "ytitle-padding",
+		"stanza:type": "number",
+		"stanza:example": 10,
+		"stanza:description": "Padding between Y title and label"
+	},
+	{
+		"stanza:key": "bar-width",
+		"stanza:example": "0.8",
+		"stanza:description": "Bar width (0-1)"
+	},
+	{
+		"stanza:key": "legend",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"true",
+			"false"
+		],
+		"stanza:example": true,
+		"stanza:description": "Show legend"
+	},
+	{
+		"stanza:key": "metastanza-menu-placement",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"top-left",
+			"top-right",
+			"bottom-left",
+			"bottom-right",
+			"none"
+		],
+		"stanza:example": "top-right",
+		"stanza:description": "Placement of the menu button"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
@@ -469,69 +601,157 @@ var metadata = {
 	{
 		"stanza:key": "--series-0-color",
 		"stanza:type": "color",
-		"stanza:default": "#a8a8e0",
-		"stanza:description": "bar color"
+		"stanza:default": "#6590e6",
+		"stanza:description": "Group color 0"
 	},
 	{
 		"stanza:key": "--series-1-color",
 		"stanza:type": "color",
-		"stanza:default": "#a8e0e0",
-		"stanza:description": "bar color"
+		"stanza:default": "#3ac9b6",
+		"stanza:description": "Group color 1"
 	},
 	{
 		"stanza:key": "--series-2-color",
 		"stanza:type": "color",
-		"stanza:default": "#a8e0a8",
-		"stanza:description": "bar color"
+		"stanza:default": "#9ede2f",
+		"stanza:description": "Group color 2"
 	},
 	{
 		"stanza:key": "--series-3-color",
 		"stanza:type": "color",
-		"stanza:default": "#e0e0a8",
-		"stanza:description": "bar color"
+		"stanza:default": "#f5da64",
+		"stanza:description": "Group color 3"
 	},
 	{
 		"stanza:key": "--series-4-color",
 		"stanza:type": "color",
-		"stanza:default": "#e0a8d3",
-		"stanza:description": "bar color"
+		"stanza:default": "#f57f5b",
+		"stanza:description": "Group color 4"
 	},
 	{
 		"stanza:key": "--series-5-color",
 		"stanza:type": "color",
-		"stanza:default": "#d3a8e0",
-		"stanza:description": "bar color"
+		"stanza:default": "#f75976",
+		"stanza:description": "Group color 5"
 	},
 	{
-		"stanza:key": "--greeting-align",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"left",
-			"center",
-			"right"
-		],
-		"stanza:default": "center",
-		"stanza:description": "text align of greeting"
+		"stanza:key": "--font-family",
+		"stanza:type": "text",
+		"stanza:default": "Helvetica Neue",
+		"stanza:description": "Font family"
+	},
+	{
+		"stanza:key": "--axis-color",
+		"stanza:type": "color",
+		"stanza:default": "#4E5059",
+		"stanza:description": "Axis color"
+	},
+	{
+		"stanza:key": "--axis-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "Axis width"
+	},
+	{
+		"stanza:key": "--grid-color",
+		"stanza:type": "color",
+		"stanza:default": "#aeb3bf",
+		"stanza:description": "Grid color"
+	},
+	{
+		"stanza:key": "--grid-dash-length",
+		"stanza:type": "number",
+		"stanza:default": "",
+		"stanza:description": "Grid dash length (Blank for solid lines)"
+	},
+	{
+		"stanza:key": "--grid-opacity",
+		"stanza:type": "number",
+		"stanza:default": "0.5",
+		"stanza:description": "Grid opacity (0-1)"
+	},
+	{
+		"stanza:key": "--grid-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "Grid width"
+	},
+	{
+		"stanza:key": "--tick-color",
+		"stanza:type": "color",
+		"stanza:default": "#4E5059",
+		"stanza:description": "Tick color"
+	},
+	{
+		"stanza:key": "--tick-length",
+		"stanza:type": "number",
+		"stanza:default": "1.5",
+		"stanza:description": "Tick length (in pixel)"
+	},
+	{
+		"stanza:key": "--tick-width",
+		"stanza:type": "number",
+		"stanza:default": "1",
+		"stanza:description": "Tick width (in pixel)"
+	},
+	{
+		"stanza:key": "--title-font-color",
+		"stanza:type": "color",
+		"stanza:default": "#4E5059",
+		"stanza:description": "Title font color"
+	},
+	{
+		"stanza:key": "--title-font-size",
+		"stanza:type": "number",
+		"stanza:default": "12",
+		"stanza:description": "Title font size"
+	},
+	{
+		"stanza:key": "--title-font-weight",
+		"stanza:type": "number",
+		"stanza:default": "400",
+		"stanza:description": "Title font weight"
+	},
+	{
+		"stanza:key": "--title-padding",
+		"stanza:type": "number",
+		"stanza:default": "10",
+		"stanza:description": "Padding between label and title"
+	},
+	{
+		"stanza:key": "--label-font-color",
+		"stanza:type": "color",
+		"stanza:default": "#4E5059",
+		"stanza:description": "Label font color"
+	},
+	{
+		"stanza:key": "--label-font-size",
+		"stanza:type": "number",
+		"stanza:default": "10",
+		"stanza:description": "Label font size"
+	},
+	{
+		"stanza:key": "--border-color",
+		"stanza:type": "color",
+		"stanza:default": "#4E5059",
+		"stanza:description": "Border color"
+	},
+	{
+		"stanza:key": "--border-width",
+		"stanza:type": "number",
+		"stanza:default": "0.5",
+		"stanza:description": "Border width"
 	}
 ]
 };
 
 var templates = [
   ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    var helper, lookupProperty = container.lookupProperty || function(parent, propertyName) {
-        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
-          return parent[propertyName];
-        }
-        return undefined
-    };
-
-  return "<h1>"
-    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"title") || (depth0 != null ? lookupProperty(depth0,"title") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"title","hash":{},"data":data,"loc":{"start":{"line":1,"column":4},"end":{"line":1,"column":13}}}) : helper)))
-    + "</h1>\n\n<div id=\"chart\"></div>\n";
+    return "";
 },"useData":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}\n\ng.series_0 {\n  fill: var(--series-0-color);\n}\n\ng.series_1 {\n  fill: var(--series-1-color);\n}\n\ng.series_2 {\n  fill: var(--series-2-color);\n}\n\ng.series_3 {\n  fill: var(--series-3-color);\n}\n\ng.series_4 {\n  fill: var(--series-4-color);\n}\n\ng.series_5 {\n  fill: var(--series-5-color);\n}";
+const url = import.meta.url.replace(/\?.*$/, '');
 
-defineStanzaElement(barchart, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, url});
 //# sourceMappingURL=barchart.js.map

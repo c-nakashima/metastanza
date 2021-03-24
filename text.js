@@ -1,21 +1,75 @@
-import { d as defineStanzaElement } from './stanza-element-d1cc4290.js';
+import { d as defineStanzaElement } from './stanza-element-c2a08f7a.js';
+import { l as loadData } from './load-data-a2861a31.js';
+import './index-b2de29ee.js';
+import './timer-be811b16.js';
+import './dsv-cd3740c6.js';
 
 async function text(stanza, params) {
-  stanza.render({
-    template: 'stanza.html.hbs',
-    parameters: {
-      greeting: `Hello, ${params['say-to']}!`
-    }
+  stanza.importWebFontCSS(
+    "https://use.fontawesome.com/releases/v5.6.3/css/all.css"
+  );
+  const dataset = await loadData(params["data-url"], params["data-type"]);
+  const textBlob = new Blob([dataset.value], {
+    type: "text/plain",
   });
+
+  const textUrl = URL.createObjectURL(textBlob);
+  console.log(textUrl);
+
+  stanza.render({
+    template: "stanza.html.hbs",
+    parameters: {
+      rows: [
+        {
+          value: dataset.value,
+        },
+      ],
+      textUrl: URL.createObjectURL(textBlob),
+    },
+  });
+  const width = params["width"];
+  const height = params["height"];
+  const padding = params["padding"];
+  const table = stanza.root.querySelector("table");
+  table.setAttribute(
+    `style`,
+    `width: ${width}px; height: ${height}px; padding: ${padding}px;`
+  );
+
+  const menu = stanza.root.querySelector(".menu");
+  switch (params["metastanza-menu-placement"]) {
+    case "top-left":
+      break;
+    case "top-right":
+      menu.setAttribute("style", "justify-content: flex-end;");
+      break;
+    case "bottom-left":
+      menu.setAttribute("style", "flex-direction: column-reverse;");
+      break;
+    case "bottom-right":
+      menu.setAttribute(
+        "style",
+        "justify-content flex-end; flex-direction: column-reverse;"
+      );
+      break;
+    case "none":
+      menu.setAttribute("style", "display: none;");
+      break;
+  }
 }
+
+var stanzaModule = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  'default': text
+});
 
 var metadata = {
 	"@context": {
 	stanza: "http://togostanza.org/resource/stanza#"
 },
 	"@id": "text",
-	"stanza:label": "PENQE_Text",
-	"stanza:definition": "",
+	"stanza:label": "text",
+	"stanza:definition": "Text MetaStanza",
 	"stanza:type": "Stanza",
 	"stanza:display": "Text",
 	"stanza:provider": "Togostanza",
@@ -28,53 +82,113 @@ var metadata = {
 	"stanza:updated": "2020-12-02",
 	"stanza:parameter": [
 	{
-		"stanza:key": "say-to",
-		"stanza:example": "world",
-		"stanza:description": "who to say hello to",
-		"stanza:required": false
+		"stanza:key": "data-url",
+		"stanza:example": "https://sparql-support.dbcls.jp/sparqlist/api/metastanza_text?tax_id=9606&gene_id=BRCA1",
+		"stanza:description": "Data source URL",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "data-type",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"json",
+			"tsv",
+			"csv",
+			"sparql-results-json"
+		],
+		"stanza:example": "json",
+		"stanza:description": "Data type",
+		"stanza:required": true
+	},
+	{
+		"stanza:key": "width",
+		"stanza:type": "number",
+		"stanza:example": 800,
+		"stanza:description": "Width"
+	},
+	{
+		"stanza:key": "height",
+		"stanza:type": "text",
+		"stanza:example": "auto",
+		"stanza:description": "Height"
+	},
+	{
+		"stanza:key": "padding",
+		"stanza:type": "number",
+		"stanza:example": 0,
+		"stanza:description": "Padding"
+	},
+	{
+		"stanza:key": "metastanza-menu-placement",
+		"stanza:type": "single-choice",
+		"stanza:choice": [
+			"top-left",
+			"top-right",
+			"bottom-left",
+			"bottom-right",
+			"none"
+		],
+		"stanza:example": "top-right",
+		"stanza:description": "Placement of the menu button"
 	}
 ],
 	"stanza:about-link-placement": "bottom-right",
 	"stanza:style": [
 	{
-		"stanza:key": "--greeting-color",
-		"stanza:type": "color",
-		"stanza:default": "#eb7900",
-		"stanza:description": "text color of greeting"
-	},
-	{
-		"stanza:key": "--greeting-align",
-		"stanza:type": "single-choice",
-		"stanza:choice": [
-			"left",
-			"center",
-			"right"
-		],
-		"stanza:default": "center",
-		"stanza:description": "text align of greeting"
-	},
-	{
-		"stanza:key": "--border-style",
-		"stanza:type": "string",
-		"stanza:default": "1px solid #333",
-		"stanza:description": "emphasized color when you hover on labels and rects"
-	},
-	{
-		"stanza:key": "--label-font",
+		"stanza:key": "--font-family",
 		"stanza:type": "text",
-		"stanza:default": "serif",
-		"stanza:description": "font(e.g: serif,san serif,fantasy)"
+		"stanza:default": "Helvetica Neue",
+		"stanza:description": "Font family"
+	},
+	{
+		"stanza:key": "--text-font-color",
+		"stanza:type": "color",
+		"stanza:default": "#4E5059",
+		"stanza:description": "Font color"
+	},
+	{
+		"stanza:key": "--text-font-size",
+		"stanza:type": "text",
+		"stanza:default": "12px",
+		"stanza:description": "Font size"
+	},
+	{
+		"stanza:key": "--text-font-weight",
+		"stanza:type": "text",
+		"stanza:default": "400",
+		"stanza:description": "Font weight"
 	}
 ]
 };
 
 var templates = [
-  ["stanza.html.hbs", {"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<style>\n  *{\n    font-family: var(--label-font);\n    box-sizing: border-box;\n  }\n  table{\n    width: 800px;\n  }\n  tr{\n    border-bottom: 1px solid #999;\n  }\n\n  dl{\n    border-bottom: 0.5px solid #999;\n    margin: 0;\n    padding: 10px 0 15px 0;  \n  }\n  dt{\n    font-weight: bold;\n    font-size: 13px;\n    line-height: 14px;\n  }\n  dd{\n    font-size: 11px;\n    margin-inline-start: 0px;\n  }\n\n\n</style>\n\n\n<table>\n    <tr>\n      <td>\n        <dl>\n          <dt>Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.</dt>\n          <dd>Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208</dd>\n        </dl>\n      </td>\n    </tr>\n    <tr>\n      <td>\n        <dl>\n          <dt>Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.</dt>\n          <dd>Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208</dd>\n        </dl>\n      </td>\n    </tr>\n      <td>\n        <dl>\n          <dt>Homozygous loss of function BRCA1 variant causing a Fanconi-anemia-like phenotype, a clinical report and review of previous patients.</dt>\n          <dd>Freire B.L., Funari M.F.A., Homma T.K., Jorge A.A.L., Leal A.M., Lerario A.M., Malaquias A.C., Velloso E.D.R.P.\nEur. J. Med. Genet. 61 130-133 (2018-01-01T00:00:00+09:00) https://pubmed.ncbi.nlm.nih.gov/29133208</dd>\n        </dl>\n      </td>\n    </tr>\n    </tr>\n</table>\n";
-},"useData":true}]
+  ["stanza.html.hbs", {"1":function(container,depth0,helpers,partials,data,blockParams) {
+    var stack1, lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "  <table>\n    <tbody>\n      <tr>\n        <td>\n          "
+    + container.escapeExpression(container.lambda(((stack1 = blockParams[0][0]) != null ? lookupProperty(stack1,"value") : stack1), depth0))
+    + "\n        </td>\n      </tr>\n    </tbody>\n  </table>\n";
+},"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data,blockParams) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), lookupProperty = container.lookupProperty || function(parent, propertyName) {
+        if (Object.prototype.hasOwnProperty.call(parent, propertyName)) {
+          return parent[propertyName];
+        }
+        return undefined
+    };
+
+  return "<link\n  rel=\"stylesheet\"\n  href=\"https://use.fontawesome.com/releases/v5.1.0/css/all.css\"\n  integrity=\"sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt\"\n  crossorigin=\"anonymous\"\n/>\n\n<div class=\"menu\">\n  <a id=\"metastanzaMenuBtn\" href=\""
+    + container.escapeExpression(((helper = (helper = lookupProperty(helpers,"textUrl") || (depth0 != null ? lookupProperty(depth0,"textUrl") : depth0)) != null ? helper : container.hooks.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"textUrl","hash":{},"data":data,"blockParams":blockParams,"loc":{"start":{"line":9,"column":34},"end":{"line":9,"column":45}}}) : helper)))
+    + "\" download=\"text\">\n    <i class=\"fas fa-ellipsis-h\"></i>\n  </a>\n</div>\n\n"
+    + ((stack1 = lookupProperty(helpers,"each").call(alias1,(depth0 != null ? lookupProperty(depth0,"rows") : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 1, blockParams),"inverse":container.noop,"data":data,"blockParams":blockParams,"loc":{"start":{"line":14,"column":0},"end":{"line":24,"column":9}}})) != null ? stack1 : "");
+},"useData":true,"useBlockParams":true}]
 ];
 
-var css = "/*\n\nYou can set up a global style here that is commonly used in each stanza.\n\nExample:\n\nh1 {\n  font-size: 24px;\n}\n\n*/\nmain {\n  padding: 1rem 2rem;\n}\n\np.greeting {\n  margin: 0;\n  font-size: 24px;\n  color: var(--greeting-color);\n  text-align: var(--greeting-align);\n}";
+const url = import.meta.url.replace(/\?.*$/, '');
 
-defineStanzaElement(text, {metadata, templates, css, url: import.meta.url});
+defineStanzaElement({stanzaModule, metadata, templates, url});
 //# sourceMappingURL=text.js.map
